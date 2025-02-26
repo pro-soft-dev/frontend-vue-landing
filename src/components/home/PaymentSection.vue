@@ -119,7 +119,7 @@ const canMakeOffer = computed(() => offerCount.value < maxOffers)
         class="w-full py-3 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50">
         DEAL!
       </button>
-      <button :disabled="!canMakeOffer"
+      <button :disabled="!canMakeOffer" @click="submitOffer"
         class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:bg-gray-300">
         {{ canMakeOffer ? 'MAKE AN OFFER' : 'Maximum offers reached' }}
         <span v-if="canMakeOffer" class="text-sm">({{ maxOffers - offerCount }} attempts left)</span>

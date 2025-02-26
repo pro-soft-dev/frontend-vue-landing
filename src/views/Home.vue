@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 import SearchBar from '../components/home/SearchBar.vue'
 import ImageCarousel from '../components/home/ImageCarousel.vue'
@@ -9,6 +9,59 @@ import ActionButtons from '../components/home/ActionButtons.vue'
 import ChartSection from '../components/home/ChartSection.vue'
 import VisitorsTable from '../components/home/VisitorsTable.vue'
 import PaymentSection from '../components/home/PaymentSection.vue'
+import SpeedDial from '../components/home/SpeedDial.vue'
+import BidPopup from '../components/home/popups/BidPopup.vue'
+import AnalyticsPopup from '../components/home/popups/AnalyticsPopup.vue'
+import MapPopup from '../components/home/popups/MapPopup.vue'
+import CreateAuctionPopup from '../components/home/popups/CreateAuctionPopup.vue'
+
+// Popup states   
+const showArticleInfo = ref(false)
+const showAuthorInfo = ref(false)
+const showSharePopup = ref(false)
+const showAnalytics = ref(false)
+const showMap = ref(false)
+const showBidPopup = ref(false)
+const showCreateAuction = ref(false)
+
+// Handlers
+const openArticleInfo = () => {
+  showArticleInfo.value = true
+}
+
+const openAuthorInfo = () => {
+  showAuthorInfo.value = true
+}
+
+const openSharePopup = () => {
+  showSharePopup.value = true
+}
+
+const handleSpeedDialAction = (action: string) => {
+  switch (action) {
+    case 'info':
+      showArticleInfo.value = true
+      break
+    case 'author':
+      showAuthorInfo.value = true
+      break
+    case 'share':
+      showSharePopup.value = true
+      break
+    case 'bid':
+      showBidPopup.value = true
+      break
+    case 'stats':
+      showAnalytics.value = true
+      break
+    case 'map':
+      showMap.value = true
+      break
+    case 'post':
+      showCreateAuction.value = true
+      break
+  }
+}
 
 onMounted(() => {
   // Additional setup code if needed
@@ -218,6 +271,16 @@ onUnmounted(() => {
       </div>
 
     </main>
+
+    <!-- Popups -->
+    <SpeedDial @action="handleSpeedDialAction" />
+
+    <!-- Popups -->
+    <BidPopup :show="showBidPopup" @close="showBidPopup = false" />
+    <AnalyticsPopup :show="showAnalytics" @close="showAnalytics = false" />
+    <MapPopup :show="showMap" @close="showMap = false" />
+    <CreateAuctionPopup :show="showCreateAuction" @close="showCreateAuction = false" />
+
   </div>
 
 </template>

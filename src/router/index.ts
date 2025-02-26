@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
-import About from '../views/AboutView.vue'
+import Create from '../views/Create.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -10,10 +10,10 @@ const routes: RouteRecordRaw[] = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'about',
+    path: '/create',
+    name: 'create',
     // Lazy loading for about page
-    component: About
+    component: Create
   },
   // Add a catch-all route for unmatched paths
   {

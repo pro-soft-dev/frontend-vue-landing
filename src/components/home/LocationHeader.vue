@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-between gap-3 mb-8 flex-wrap">
-    <h2 class="text-3xl font-medium ">
+    <h2 class="text-xl lg:text-3xl font-medium ">
       <span class="text-blue-600 underline">Leckerschmecker</span>
       <span class="text-blue-600">: </span>
       <span class="text-red-500">Food</span>
