@@ -1,48 +1,12 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 
+import SearchBar from '../components/home/SearchBar.vue'
+import ImageCarousel from '../components/home/ImageCarousel.vue'
+import HeroSection from '../components/home/HeroSection.vue'
 import ChartSection from '../components/home/ChartSection.vue'
 import VisitorsTable from '../components/home/VisitorsTable.vue'
 import PaymentSection from '../components/home/PaymentSection.vue'
-
-const carouselItems = [
-  'Office',
-  'Nature',
-  'Company Staff',
-  'Architecture',
-  'Food',
-  'Travel',
-  'Fashion',
-  'People',
-  'Art & Design',
-  'Office',
-  'Nature',
-  'Company Staff',
-  'Architecture',
-  'Food',
-  'Travel',
-  'Fashion',
-  'People',
-  'Art & Design'
-]
-
-const currentOffset = ref(0)
-let intervalId: number | undefined
-
-const startCarousel = () => {
-  intervalId = window.setInterval(() => {
-    currentOffset.value = (currentOffset.value + 100 / 6) % 100
-  }, 3000)
-}
-
-const currentImageIndex = ref(0)
-let slideshowIntervalId: number | undefined
-
-const startSlideshow = () => {
-  slideshowIntervalId = window.setInterval(() => {
-    currentImageIndex.value = (currentImageIndex.value + 1) % 5
-  }, 5000)
-}
 
 const showPaymentModal = ref(false)
 const includeFees = ref(false)
@@ -58,117 +22,21 @@ const closePaymentModal = () => {
 }
 
 onMounted(() => {
-  startCarousel()
-  startSlideshow()
+  // Additional setup code if needed
 })
 
 onUnmounted(() => {
-  if (intervalId) {
-    clearInterval(intervalId)
-  }
-  if (slideshowIntervalId) {
-    clearInterval(slideshowIntervalId)
-  }
+  // Cleanup code if needed
 })
 </script>
 
 <template>
   <div class="home pb-24">
     <div class="h-[100vh] overflow-hidden">
-      <!-- Search Bar -->
-      <nav class="bg-white py-4 mb-4">
-        <div class="max-w-screen-2xl mx-auto px-4">
-          <div class="flex justify-center items-center flex-col lg:flex-row gap-3 xl:gap-8">
-            <div class="flex items-center">
-              <div class="relative flex items-center flex-1 max-w-3xl">
-                <!-- Search Icon -->
-                <div class="absolute left-3 text-gray-400">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-
-                <!-- Search Input -->
-                <input type="text" placeholder="Find Favorite Category..."
-                  class="w-full pl-10 pr-24 py-2 rounded-full bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-200">
-
-                <!-- Advanced Button -->
-                <button class="absolute right-3 text-gray-500 hover:text-gray-700 flex items-center gap-1">
-                  Advanced
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <!-- Vertical Separator -->
-            <div class="h-8 w-px bg-gray-200 hidden lg:block"></div>
-
-            <!-- Navigation Links -->
-            <div
-              class="flex items-center gap-2 xl:gap-6 text-sm flex-wrap justify-center md:justify-start md:flex-nowrap">
-              <a href="#" class="text-black p-2 font-bold hidden lg:block">Trending</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">Nature</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">Architecture</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">Company</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">Food</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">Travel</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">Fashion</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">People</a>
-              <a href="#" class="text-gray-500 hover:text-gray-900 bg-gray-100 p-2 rounded-sm">Art & Design</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <!-- Carousel Section -->
-      <div class="carousel-container relative overflow-hidden h-16 mb-4">
-        <div class="carousel-track flex transition-transform duration-1000 gap-3"
-          :style="{ transform: `translateX(-${currentOffset}%)` }">
-          <div v-for="(item, index) in carouselItems" :key="index" class="carousel-item relative flex-none w-60">
-            <img :src="`/thumbnails/thumb-${(index % 6) + 1}.jpg`" alt="" class="w-full h-16 object-cover rounded-lg">
-            <div class="absolute inset-0 rounded-lg bg-opacity-30 flex items-center justify-center">
-              <span class="text-white font-medium text-lg">{{ item }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Hero Section -->
-      <section
-        class="hero relative h-[calc(100vh-theme('spacing.16')-theme('spacing.4')-theme('spacing.4')-theme('spacing.16'))]">
-        <img src="/images/hero-image.jpg" alt="Welcome" class="w-full h-full object-cover">
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
-          <h1 class="text-4xl lg:text-5xl font-medium mb-6 text-center">Welcome Home</h1>
-          <div class="play-button cursor-pointer">
-            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" stroke-width="1" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 8l6 4-6 4V8z" />
-            </svg>
-          </div>
-        </div>
-
-        <!-- Image Slider -->
-        <div
-          class="absolute bottom-[50px] left-0 right-0 justify-center items-center h-32 my-8 overflow-hidden hidden md:flex">
-          <div class="flex items-center gap-4 transition-all duration-500"
-            :style="{ transform: `translateX(${(2 - currentImageIndex) * 160}px)` }">
-            <div v-for="i in 5" :key="i" @click="currentImageIndex = i - 1"
-              class="relative transition-all duration-500 cursor-pointer" :class="{
-                'w-48 h-32': currentImageIndex === i - 1,
-                'w-32 h-24': currentImageIndex !== i - 1
-              }">
-              <img :src="`/thumbnails/bottom-${i}.jpg`" :alt="`Slide ${i}`"
-                class="rounded-lg object-cover w-full h-full transition-all duration-500" :class="{
-                  'opacity-100': currentImageIndex === i - 1,
-                  'opacity-60': currentImageIndex !== i - 1
-                }">
-            </div>
-          </div>
-        </div>
-      </section>
+      <SearchBar />
+      <ImageCarousel />
+      <HeroSection />
     </div>
-
 
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-6 py-8">
