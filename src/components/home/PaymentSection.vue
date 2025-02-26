@@ -29,7 +29,6 @@ const closePaymentModal = () => {
 const offerCount = ref(0)
 const maxOffers = 3
 const offerStatus = ref<'pending' | 'accepted' | 'rejected' | null>(null)
-const counterOffer = ref<number | null>(null)
 
 const submitOffer = () => {
   offerCount.value++
@@ -42,11 +41,26 @@ const canMakeOffer = computed(() => offerCount.value < maxOffers)
 
 <template>
   <section class="payment-section bg-white rounded-lg p-6 mb-6">
-    <h3 class="text-xl mb-4">Payment Method</h3>
+    <h3 class="text-xl mb-4 hidden md:block">Payment Method</h3>
+
+    <!-- Mobile Payment Method Select -->
+    <div class="mb-4 md:hidden">
+      <div class="flex gap-8 mb-6">
+        <button @click="activeTab = 'buy'" :class="['flex-1 py-2 font-medium',
+          activeTab === 'buy' ? 'border-b-2 border-orange-500 text-black' : 'text-gray-500']">
+          Buy
+        </button>
+        <button @click="activeTab = 'offer'" :class="['flex-1 py-2 font-medium',
+          activeTab === 'offer' ? 'border-b-2 border-orange-500 text-black' : 'text-gray-500']">
+          Make an Offer
+        </button>
+      </div>
+      <button class="bg-orange-500 text-white w-full py-3">Buy Now</button>
+    </div>
 
     <!-- Payment Method Select -->
     <div class="relative mb-6">
-      <select v-model="selectedPaymentMethod" class="w-full p-3 pl-10 border rounded-lg appearance-none">
+      <select v-model="selectedPaymentMethod" class="w-full p-3 pl-10 border appearance-none">
         <option value="paypal">PayPal</option>
         <option value="credit">Credit Card</option>
       </select>
@@ -62,7 +76,7 @@ const canMakeOffer = computed(() => offerCount.value < maxOffers)
       </div>
     </div>
 
-    <div class="flex gap-8 mb-6">
+    <div class="hidden gap-8 mb-6 md:flex">
       <button @click="activeTab = 'buy'" :class="['flex-1 py-2 font-medium',
         activeTab === 'buy' ? 'border-b-2 border-orange-500 text-black' : 'text-gray-500']">
         Buy
@@ -81,7 +95,7 @@ const canMakeOffer = computed(() => offerCount.value < maxOffers)
       </div>
     </div>
 
-    <div v-if="activeTab === 'offer'" class="mb-6">
+    <div class="mb-6">
       <input type="range" v-model="offerAmount" :min="minOffer" :max="maxOffer"
         class="w-full h-2 bg-orange-500 rounded-lg appearance-none">
       <div class="flex justify-between mt-2">
@@ -100,16 +114,17 @@ const canMakeOffer = computed(() => offerCount.value < maxOffers)
         <div class="text-sm text-gray-500">Total Fee</div>
       </div>
     </div>
-
-    <button v-if="activeTab === 'buy'" @click="openPaymentModal"
-      class="w-full py-3 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50">
-      DEAL!
-    </button>
-    <button v-else @click="submitOffer" :disabled="!canMakeOffer"
-      class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:bg-gray-300">
-      {{ canMakeOffer ? 'MAKE AN OFFER' : 'Maximum offers reached' }}
-      <span v-if="canMakeOffer" class="text-sm">({{ maxOffers - offerCount }} attempts left)</span>
-    </button>
+    <div class="hidden md:flex gap-4">
+      <button @click="openPaymentModal"
+        class="w-full py-3 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50">
+        DEAL!
+      </button>
+      <button :disabled="!canMakeOffer"
+        class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:bg-gray-300">
+        {{ canMakeOffer ? 'MAKE AN OFFER' : 'Maximum offers reached' }}
+        <span v-if="canMakeOffer" class="text-sm">({{ maxOffers - offerCount }} attempts left)</span>
+      </button>
+    </div>
 
     <!-- Payment Modal -->
     <div v-if="showPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

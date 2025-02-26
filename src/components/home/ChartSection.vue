@@ -92,13 +92,13 @@ onMounted(() => {
 
 <template>
   <div class="flex gap-3 mt-6 flex-col md:flex-row">
-    <div class="w-full md:w-1/2 bg-white rounded-lg shadow p-6">
+    <div class="w-full md:w-1/2 md:bg-white rounded-lg md:shadow p-6">
       <h4 class="text-lg font-medium mb-4">Article Activity</h4>
       <div class="h-[300px]">
         <canvas ref="barChartRef"></canvas>
       </div>
     </div>
-    <div class="w-full md:w-1/2 bg-white rounded-lg shadow p-6">
+    <div class="w-full md:w-1/2 md:bg-white rounded-lg md:shadow p-6">
       <h4 class="text-lg font-medium mb-4">Visitor & Bidder Trends</h4>
       <div class="h-[300px]">
         <canvas ref="lineChartRef"></canvas>
