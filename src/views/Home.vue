@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted } from 'vue'
 import Chart from 'chart.js/auto'
+import { api } from '../services/api'
 
 // Chart refs
 const barChartRef = ref<HTMLCanvasElement | null>(null)
@@ -48,9 +49,50 @@ const startSlideshow = () => {
   }, 3000)
 }
 
+// Add these
+interface Visitor {
+  id: string;
+  username: string;
+  onlineTime: string;
+  country: string;
+  city: string;
+}
+
+const visitors = ref<Visitor[]>([])
+const isLoading = ref(false)
+const error = ref<string | null>(null)
+const sortBy = ref('default')
+
+const fetchVisitors = async () => {
+  try {
+    isLoading.value = true
+    const response = await api.getVisitors()
+    visitors.value = response.visitors
+  } catch (err) {
+    error.value = 'Failed to load visitors data'
+    console.error('Error fetching visitors:', err)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const handleSort = (event: Event) => {
+  const value = (event.target as HTMLSelectElement).value
+  sortBy.value = value
+  if (value !== 'id') {
+    visitors.value.sort((a, b) => {
+      if (value === 'online') return a.onlineTime.localeCompare(b.onlineTime)
+      if (value === 'country') return a.country.localeCompare(b.country)
+      if (value === 'city') return a.city.localeCompare(b.city)
+      return a.username.localeCompare(b.username)
+    })
+  }
+}
+
 onMounted(() => {
   startCarousel()
   startSlideshow()
+  fetchVisitors()
 
   if (barChartRef.value && lineChartRef.value) {
     // Initialize charts...
@@ -165,7 +207,7 @@ onUnmounted(() => {
 
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-4 py-8">
+    <main class="max-w-6xl mx-auto px-4 py-8">
       <!-- Header with Location -->
       <div class="flex items-center justify-between gap-3 mb-8">
         <h2 class="text-3xl font-medium ">
@@ -283,65 +325,73 @@ onUnmounted(() => {
         <h3 class="text-xl font-bold mb-6">
           <span class="text-gray-400 text-lg">"Leckerschmecker : Food-Events"</span> Analytics :
         </h3>
-        <div class="analytics-grid grid grid-cols-3 gap-6 mb-8">
-          <div class="stat-card bg-white p-6 rounded-lg shadow">
-            <div class="text-4xl font-bold mb-2">15135</div>
-            <div class="text-gray-500">Current Visitors</div>
+        <div class="flex gap-3 items-center">
+          <div class="analytics-grid flex flex-col gap-3 w-1/3">
+            <div
+              class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between flex-col gap-8 py-12">
+              <div class="text-6xl font-bold">15135</div>
+              <div class="text-gray-500">Current Visitors</div>
+            </div>
+            <div class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between text-lg">
+              <div class="text-gray-500">Total Views</div>
+              <div class="font-bold">15135</div>
+            </div>
+            <div class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between text-lg">
+              <div class="text-gray-500">Average Bid</div>
+              <div class="font-bold">45.5$</div>
+            </div>
           </div>
-          <div class="stat-card bg-white p-6 rounded-lg shadow">
-            <div class="text-4xl font-bold mb-2">15135</div>
-            <div class="text-gray-500">Total Views</div>
-          </div>
-          <div class="stat-card bg-white p-6 rounded-lg shadow">
-            <div class="text-4xl font-bold mb-2">45.5$</div>
-            <div class="text-gray-500">Average Bid</div>
-          </div>
-        </div>
+          <div class="visitors-list bg-white rounded-lg shadow p-6 w-2/3">
+            <div class="flex justify-between items-center mb-3">
+              <div class="flex gap-1">
+                <div class="text-lg text-black">Today</div>/
+                <div class="text-lg text-gray-500">Week</div>/
+                <div class="text-lg text-gray-500">Month</div>
+              </div>
+              <div class="flex gap-2">
+                <button class="text-gray-500">Sort by</button>
+                <select v-model="sortBy" @change="handleSort"
+                  class="text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500">
+                  <option value="id">Default</option>
+                  <option value="onlineTime">Online Time</option>
+                  <option value="country">Country</option>
+                  <option value="city">City</option>
+                  <option value="username">User</option>
+                </select>
+              </div>
+            </div>
 
-        <div class="visitors-list bg-white rounded-lg shadow p-6">
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="text-left text-gray-500 border-b">
-                  <th class="pb-4">User</th>
-                  <th class="pb-4">Online Time</th>
-                  <th class="pb-4">Country</th>
-                  <th class="pb-4">City</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y">
-                <tr class="py-3">
-                  <td class="py-4">@Hasor2154</td>
-                  <td>15 Sec</td>
-                  <td>USA</td>
-                  <td>USA</td>
-                </tr>
-                <tr>
-                  <td class="py-4">@wegp316_21</td>
-                  <td>25 Sec</td>
-                  <td>Germany</td>
-                  <td>Munich</td>
-                </tr>
-                <tr>
-                  <td class="py-4">@CreativeDen</td>
-                  <td>26 Sec</td>
-                  <td>Germany</td>
-                  <td>Berlin</td>
-                </tr>
-                <tr>
-                  <td class="py-4">Unknown</td>
-                  <td>40 Sec</td>
-                  <td>Ukraine</td>
-                  <td>Kiev</td>
-                </tr>
-                <tr>
-                  <td class="py-4">@Sandra2cd82</td>
-                  <td>2 Min</td>
-                  <td>France</td>
-                  <td>Paris</td>
-                </tr>
-              </tbody>
-            </table>
+            <!-- Add loading and error states -->
+            <div v-if="isLoading" class="text-center py-4">
+              Loading visitors...
+            </div>
+
+            <div v-else-if="error" class="text-red-500 text-center py-4">
+              {{ error }}
+            </div>
+
+            <div v-else class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="text-left text-gray-500">
+                    <th class="font-medium">User List</th>
+                    <th class="font-medium">Online Time</th>
+                    <th class="font-medium">Country</th>
+                    <th class="font-medium">City</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-black">
+                  <tr v-for="visitor in visitors" :key="visitor.id">
+                    <td class="py-3" :class="visitor.username === 'Unknown' ? 'text-gray-500' : 'text-blue-500'">
+                      <span class="text-gray-500">{{ visitor.id }}.</span> {{ visitor.username }}
+                    </td>
+                    <td>{{ visitor.onlineTime }}</td>
+                    <td>{{ visitor.country }}</td>
+                    <td>{{ visitor.city }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
