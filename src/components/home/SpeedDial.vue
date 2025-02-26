@@ -37,7 +37,7 @@ const emit = defineEmits<{
   <div class="fixed right-4 bottom-7 md:bottom-[50%] flex flex-col-reverse gap-2 md:transform md:translate-y-1/2">
     <!-- Toggle Button -->
     <button @click="isOpen = !isOpen"
-      class="w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors md:hidden">
+      :class="['w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors md:hidden']">
       <svg class="w-6 h-6 transition-transform" :class="{ 'rotate-45': isOpen }" fill="none" stroke="currentColor"
         viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -48,7 +48,9 @@ const emit = defineEmits<{
     <div class="flex flex-col-reverse gap-2 transition-all duration-200 origin-bottom mb-2"
       :class="isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 invisible'">
       <button v-for="action in actions" :key="action.name" @click="$emit('action', action.event)"
-        class="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 group relative">
+        class="w-12 h-12  rounded-full shadow-lg flex items-center justify-center group relative"
+        :class="action.name==='Post'? 'bg-orange-500 text-white hover:text-orange-white':'bg-white hover:bg-gray-50'"
+        >
         <span class="sr-only">{{ action.name }}</span>
 
         <!-- Icon -->

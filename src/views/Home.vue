@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import SearchBar from '../components/home/SearchBar.vue'
 import ImageCarousel from '../components/home/ImageCarousel.vue'
@@ -14,6 +15,9 @@ import BidPopup from '../components/home/popups/BidPopup.vue'
 import AnalyticsPopup from '../components/home/popups/AnalyticsPopup.vue'
 import MapPopup from '../components/home/popups/MapPopup.vue'
 import CreateAuctionPopup from '../components/home/popups/CreateAuctionPopup.vue'
+import AuthorInfoPopup from '../components/home/popups/AuthorInfoPopup.vue'
+import ArticleInfoPopup from '../components/home/popups/ArticleInfoPopup.vue'
+import SharePopup from '../components/home/popups/SharePopup.vue'
 
 // Popup states   
 const showArticleInfo = ref(false)
@@ -24,18 +28,9 @@ const showMap = ref(false)
 const showBidPopup = ref(false)
 const showCreateAuction = ref(false)
 
+const router = useRouter()
+
 // Handlers
-const openArticleInfo = () => {
-  showArticleInfo.value = true
-}
-
-const openAuthorInfo = () => {
-  showAuthorInfo.value = true
-}
-
-const openSharePopup = () => {
-  showSharePopup.value = true
-}
 
 const handleSpeedDialAction = (action: string) => {
   switch (action) {
@@ -58,7 +53,7 @@ const handleSpeedDialAction = (action: string) => {
       showMap.value = true
       break
     case 'post':
-      showCreateAuction.value = true
+      router.push('/create')
       break
   }
 }
@@ -276,10 +271,13 @@ onUnmounted(() => {
     <SpeedDial @action="handleSpeedDialAction" />
 
     <!-- Popups -->
-    <BidPopup :show="showBidPopup" @close="showBidPopup = false" />
-    <AnalyticsPopup :show="showAnalytics" @close="showAnalytics = false" />
-    <MapPopup :show="showMap" @close="showMap = false" />
-    <CreateAuctionPopup :show="showCreateAuction" @close="showCreateAuction = false" />
+    <AuthorInfoPopup :show="showAuthorInfo" @close="showAuthorInfo = false" v-bind:class="{ 'modal-enter-active': showAuthorInfo }" />
+    <ArticleInfoPopup :show="showArticleInfo" @close="showArticleInfo = false" v-bind:class="{ 'modal-enter-active': showArticleInfo }" />
+    <SharePopup :show="showSharePopup" @close="showSharePopup = false" v-bind:class="{ 'modal-enter-active': showSharePopup }" />
+    <BidPopup :show="showBidPopup" @close="showBidPopup = false" v-bind:class="{ 'modal-enter-active': showBidPopup }" />
+    <AnalyticsPopup :show="showAnalytics" @close="showAnalytics = false" v-bind:class="{ 'modal-enter-active': showAnalytics }" />
+    <MapPopup :show="showMap" @close="showMap = false" v-bind:class="{ 'modal-enter-active': showMap }" />
+    <CreateAuctionPopup :show="showCreateAuction" @close="showCreateAuction = false" v-bind:class="{ 'modal-enter-active': showCreateAuction }" />
 
   </div>
 
@@ -333,5 +331,18 @@ input[type="range"]::-webkit-slider-thumb {
   border: 2px solid #f97316;
   border-radius: 50%;
   cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-enter-active {
+  animation: fadeIn 0.2s;
 }
 </style>
