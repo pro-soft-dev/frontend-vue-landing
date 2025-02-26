@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted } from 'vue'
-import Chart from 'chart.js/auto'
 import { api } from '../services/api'
 
 // Chart refs
@@ -45,7 +44,7 @@ let slideshowIntervalId: number | undefined
 
 const startSlideshow = () => {
   slideshowIntervalId = window.setInterval(() => {
-    currentImageIndex.value = (currentImageIndex.value + 1) % 6
+    currentImageIndex.value = (currentImageIndex.value + 1) % 5
   }, 3000)
 }
 
@@ -79,13 +78,16 @@ const fetchVisitors = async () => {
 const handleSort = (event: Event) => {
   const value = (event.target as HTMLSelectElement).value
   sortBy.value = value
-  if (value !== 'id') {
+  if (value !== 'default') {
     visitors.value.sort((a, b) => {
       if (value === 'online') return a.onlineTime.localeCompare(b.onlineTime)
       if (value === 'country') return a.country.localeCompare(b.country)
       if (value === 'city') return a.city.localeCompare(b.city)
       return a.username.localeCompare(b.username)
     })
+  }
+  else {
+    visitors.value.sort((a, b) => a.id.localeCompare(b.id))
   }
 }
 
@@ -352,11 +354,11 @@ onUnmounted(() => {
                 <button class="text-gray-500">Sort by</button>
                 <select v-model="sortBy" @change="handleSort"
                   class="text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500">
-                  <option value="id">Default</option>
-                  <option value="onlineTime">Online Time</option>
+                  <option value="default">Default</option>
+                  <option value="online">Online Time</option>
                   <option value="country">Country</option>
                   <option value="city">City</option>
-                  <option value="username">User</option>
+                  <option value="user">User</option>
                 </select>
               </div>
             </div>
