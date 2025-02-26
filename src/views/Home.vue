@@ -70,9 +70,7 @@ onUnmounted(() => {
 
 <template>
   <div class="home">
-    <div class="h-[100vh]">
-      <!-- <div class="h-[calc(100vh-100px)]"> -->
-
+    <div class="h-[100vh] overflow-hidden">
       <!-- Search Bar -->
       <nav class="bg-white py-4 mb-4">
         <div class="max-w-screen-2xl mx-auto px-4">
@@ -133,7 +131,8 @@ onUnmounted(() => {
       </div>
 
       <!-- Hero Section -->
-      <section class="hero relative">
+      <section
+        class="hero relative h-[calc(100vh-theme('spacing.16')-theme('spacing.4')-theme('spacing.4')-theme('spacing.16'))]">
         <img src="/images/hero-image.jpg" alt="Welcome" class="w-full h-full object-cover">
         <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
           <h1 class="text-4xl lg:text-5xl font-medium mb-6 text-center">Welcome Home</h1>
@@ -144,115 +143,147 @@ onUnmounted(() => {
             </svg>
           </div>
         </div>
+        <!-- Image Slider -->
+        <div class="absolute bottom-[50px] left-0 right-0 flex justify-center items-center h-32 my-8 overflow-hidden">
+          <div class="flex items-center gap-4 transition-all duration-500"
+            :style="{ transform: `translateX(${(2 - currentImageIndex) * 160}px)` }">
+            <div v-for="i in 5" :key="i" @click="currentImageIndex = i - 1"
+              class="relative transition-all duration-500 cursor-pointer" :class="{
+                'w-48 h-32': currentImageIndex === i - 1,
+                'w-32 h-24': currentImageIndex !== i - 1
+              }">
+              <img :src="`/thumbnails/bottom-${i}.jpg`" :alt="`Slide ${i}`"
+                class="rounded-lg object-cover w-full h-full transition-all duration-500" :class="{
+                  'opacity-100': currentImageIndex === i - 1,
+                  'opacity-60': currentImageIndex !== i - 1
+                }">
+            </div>
+          </div>
+        </div>
       </section>
     </div>
-    <!-- Image Slider -->
-    <div class="relative flex justify-center items-center h-32 my-8 overflow-hidden">
-      <div class="flex items-center gap-4 transition-all duration-500"
-        :style="{ transform: `translateX(-${currentImageIndex * 20}%)` }">
-        <div v-for="i in 6" :key="i" class="relative transition-all duration-500" :class="{
-          'w-48 h-32': currentImageIndex === i - 1,
-          'w-32 h-24': currentImageIndex !== i - 1
-        }">
-          <img :src="`/thumbnails/bottom-${i}.jpg`" :alt="`Slide ${i}`"
-            class="rounded-lg object-cover w-full h-full transition-all duration-500" :class="{
-              'opacity-100': currentImageIndex === i - 1,
-              'opacity-60': currentImageIndex !== i - 1
-            }">
-        </div>
-      </div>
-    </div>
 
-    <!-- Bottom Thumbnails -->
-    <div class="bottom-thumbnails grid grid-cols-6 gap-1 h-24">
-      <div v-for="i in 6" :key="i" class="relative overflow-hidden cursor-pointer">
-        <img :src="`/thumbnails/bottom-${i}.jpg`" alt="" class="w-full h-full object-cover">
-      </div>
-    </div>
 
     <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-4 py-8">
       <!-- Header with Location -->
-      <div class="flex items-center gap-3 mb-8">
-        <h2 class="text-xl font-bold text-blue-600">Leckerschmecker</h2>
-        <span class="text-gray-500">: Food</span>
+      <div class="flex items-center justify-between gap-3 mb-8">
+        <h2 class="text-3xl font-medium ">
+          <span class="text-blue-600 underline">Leckerschmecker</span>
+          <span class="text-blue-600">: </span>
+          <span class="text-red-500">Food</span>
+        </h2>
         <div class="ml-2 flex items-center">
-          <span class="text-green-500">●</span>
-          <span class="ml-1 text-gray-600">Overview</span>
+          <button class="flex items-center gap-2 mr-2 bg-white rounded-lg p-2">
+            <svg class="h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <div class="h-5 w-px mx-0 bg-gray-300"></div>
+            <span class="text-gray-600">Experience</span>
+          </button>
         </div>
       </div>
 
       <!-- Action Buttons -->
       <div class="flex items-center gap-4 mb-8">
-        <div class="flex gap-2">
-          <button class="px-4 py-2 bg-gray-100 rounded-md flex items-center gap-2">
-            <span>Share</span>
-          </button>
-          <button class="px-4 py-2 bg-gray-100 rounded-md flex items-center gap-2">
-            <span>Save</span>
-          </button>
-        </div>
-        <div class="ml-auto flex items-center gap-4">
-          <button class="flex items-center gap-1">
-            <span>Direction</span>
-          </button>
-          <button class="flex items-center gap-1">
-            <span>Map</span>
-          </button>
-        </div>
-      </div>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget risus at nibh pulvinar tempus in sit
-        amet elit. Nam maximus, dolor in aliquam malesuada, odio orci dapibus ipsum, at ullamcorper lacus quam ut
-        quam.
-        Donec ultricies sapien libero, a rhoncus magna volutpat in. Mauris at dolor vestibulum, commodo erat non,
-        bibendum tellus. Nam nec dolor tortor. Curabitur ligula nulla, dignissim ut nulla ac, blandit aliquet urna.
-        Vestibulum turpis tortor, placerat vulputate libero quis, placerat varius mauris. Ut ac efficitur tellus,
-        iaculis rhoncus metus. Aenean condimentum pellentesque neque vitae dictum. Donec rhoncus mi orci, eget blandit
-        risus eleifend nec. Duis porttitor augue non malesuada pharetra. Nam consequat consequat ullamcorper.
-        Fusce commodo vitae neque a aliquet. Duis gravida diam in fringilla pharetra. Sed ipsum ex, dapibus eget augue
-        sed, tristique dignissim ante. In ornare vulputate elit non auctor. Ut id sagittis est. Duis feugiat pulvinar
-        laoreet. Nam ex arcu, pretium vestibulum nunc vel, porta viverra lacus. Quisque mauris diam, dignissim gravida
-        velit ac, cursus bibendum risus. Nulla dictum tincidunt ligula nec iaculis. Vestibulum ullamcorper urna
-        sodales,
-        ullamcorper libero non, laoreet felis. Nunc mattis tortor a sem varius pharetra. Proin sodales elementum elit
-        eget commodo. Quisque accumsan, sapien elementum condimentum elementum, libero turpis tincidunt purus, at
-        iaculis velit risus eu sapien. Nam id magna pulvinar, dapibus quam ut, bibendum lectus. Vivamus aliquam mi
-        molestie nunc consequat, eu dapibus augue gravida</p>
-      <!-- Map Section -->
-      <div class="map-section mb-12">
-        <div class="rounded-full overflow-hidden w-full aspect-square max-w-xl mx-auto">
-          <!-- Replace with actual map component -->
-          <div class="w-full h-full bg-gray-200"></div>
-        </div>
-      </div>
+        <button class="flex items-center gap-2 px-4 py-2 bg-transparent rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+          Mark
+        </button>
 
+        <div class="h-8 w-px bg-gray-300"></div>
+
+        <button class="flex items-center gap-2 px-4 py-2 bg-tran rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+          Share
+        </button>
+
+        <div class="h-8 w-px bg-gray-300"></div>
+
+        <button class="flex items-center gap-2 px-4 py-2 bg-tran rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          Print
+        </button>
+
+        <div class="h-8 w-px bg-gray-300"></div>
+
+        <button class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full">
+          Visit Website
+        </button>
+      </div>
+      <div class="mb-16">
+        <p class="break-all whitespace-pre-wrap">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget
+          risus at
+          nibh pulvinar tempus in sit
+          amet elit. Nam maximus, dolor in aliquam malesuada, odio orci dapibus ipsum, at ullamcorper lacus quam ut
+          quam.
+          Donec ultricies sapien libero, a rhoncus magna volutpat in. Mauris at dolor vestibulum, commodo erat non,
+          bibendum tellus. Nam nec dolor tortor. Curabitur ligula nulla, dignissim ut nulla ac, blandit aliquet urna.
+          Vestibulum turpis tortor, placerat vulputate libero quis, placerat varius mauris. Ut ac efficitur tellus,
+          iaculis rhoncus metus. Aenean condimentum pellentesque neque vitae dictum. Donec rhoncus mi orci, eget blandit
+          risus eleifend nec. Duis porttitor augue non malesuada pharetra. Nam consequat consequat ullamcorper.
+          <br>
+          <br>
+          Fusce commodo vitae neque a aliquet. Duis gravida diam in fringilla pharetra. Sed ipsum ex, dapibus eget augue
+          sed, tristique dignissim ante. In ornare vulputate elit non auctor. Ut id sagittis est. Duis feugiat pulvinar
+          laoreet. Nam ex arcu, pretium vestibulum nunc vel, porta viverra lacus. Quisque mauris diam, dignissim gravida
+          velit ac, cursus bibendum risus. Nulla dictum tincidunt ligula nec iaculis. Vestibulum ullamcorper urna
+          sodales,
+          ullamcorper libero non, laoreet felis. Nunc mattis tortor a sem varius pharetra. Proin sodales elementum elit
+          eget commodo. Quisque accumsan, sapien elementum condimentum elementum, libero turpis tincidunt purus, at
+          iaculis velit risus eu sapien. Nam id magna pulvinar, dapibus quam ut, bibendum lectus. Vivamus aliquam mi
+          molestie nunc consequat, eu dapibus augue gravida
+        </p>
+        <!-- Map Section -->
+
+        <div class="map-section w-full">
+          <div class=" w-full mx-auto">
+            <!-- Replace with actual map component -->
+            <div class="w-full h-full bg-gray-200">
+              <img src="/images/map.png" alt="Map" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget risus at nibh pulvinar tempus in sit
+          amet elit. Nam maximus, dolor in aliquam malesuada, odio orci dapibus ipsum, at ullamcorper lacus quam ut
+          quam.
+          Donec ultricies sapien libero, a rhoncus magna volutpat in. Mauris at dolor vestibulum, commodo erat non,
+          bibendum tellus. Nam nec dolor tortor. Curabitur ligula nulla, dignissim ut nulla ac, blandit aliquet urna.
+          Vestibulum turpis tortor, placerat vulputate libero quis, placerat varius mauris. Ut ac efficitur tellus,
+          iaculis rhoncus metus. Aenean condimentum pellentesque neque vitae dictum. Donec rhoncus mi orci, eget blandit
+          risus eleifend nec. Duis porttitor augue non malesuada pharetra. Nam consequat consequat ullamcorper.
+          <br>
+          <br>
+          Fusce commodo vitae neque a aliquet. Duis gravida diam in fringilla pharetra. Sed ipsum ex, dapibus eget augue
+          sed, tristique dignissim ante. In ornare vulputate elit non auctor. Ut id sagittis est. Duis feugiat pulvinar
+          laoreet. Nam ex arcu, pretium vestibulum nunc vel, porta viverra lacus. Quisque mauris diam, dignissim gravida
+          velit ac, cursus bibendum risus. Nulla dictum tincidunt ligula nec iaculis. Vestibulum ullamcorper urna
+          sodales,
+          ullamcorper libero non, laoreet felis. Nunc mattis tortor a sem varius pharetra. Proin sodales elementum elit
+          eget commodo. Quisque accumsan, sapien elementum condimentum elementum, libero turpis tincidunt purus, at
+          iaculis velit risus eu sapien. Nam id magna pulvinar, dapibus quam ut, bibendum lectus. Vivamus aliquam mi
+          molestie nunc consequat, eu dapibus augue gravida.
+        </p>
+      </div>
       <!-- Analytics Section -->
       <section class="analytics mb-12">
-        <h3 class="text-2xl font-bold mb-6">Analytics</h3>
-        <div class="stats grid grid-cols-3 gap-8 mb-8">
-          <div>
-            <div class="text-4xl font-bold">15135</div>
-            <div class="text-gray-500">Total Views</div>
-          </div>
-          <div>
-            <div class="text-4xl font-bold">8650</div>
-            <div class="text-gray-500">Unique Views</div>
-          </div>
-          <div>
-            <div class="text-4xl font-bold">234</div>
-            <div class="text-gray-500">Shares</div>
-          </div>
-        </div>
+        <h3 class="text-xl font-bold mb-6">
+          <span class="text-gray-400 text-lg">"Leckerschmecker : Food-Events"</span> Analytics :
+        </h3>
 
-        <!-- Charts -->
-        <div class="charts grid grid-cols-2 gap-8">
-          <div class="chart-container">
-            <canvas ref="barChartRef"></canvas>
-          </div>
-          <div class="chart-container">
-            <canvas ref="lineChartRef"></canvas>
-          </div>
-        </div>
       </section>
 
       <!-- Make an Offer Section -->
