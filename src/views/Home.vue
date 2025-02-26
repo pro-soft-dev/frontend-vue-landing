@@ -283,7 +283,67 @@ onUnmounted(() => {
         <h3 class="text-xl font-bold mb-6">
           <span class="text-gray-400 text-lg">"Leckerschmecker : Food-Events"</span> Analytics :
         </h3>
+        <div class="analytics-grid grid grid-cols-3 gap-6 mb-8">
+          <div class="stat-card bg-white p-6 rounded-lg shadow">
+            <div class="text-4xl font-bold mb-2">15135</div>
+            <div class="text-gray-500">Current Visitors</div>
+          </div>
+          <div class="stat-card bg-white p-6 rounded-lg shadow">
+            <div class="text-4xl font-bold mb-2">15135</div>
+            <div class="text-gray-500">Total Views</div>
+          </div>
+          <div class="stat-card bg-white p-6 rounded-lg shadow">
+            <div class="text-4xl font-bold mb-2">45.5$</div>
+            <div class="text-gray-500">Average Bid</div>
+          </div>
+        </div>
 
+        <div class="visitors-list bg-white rounded-lg shadow p-6">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="text-left text-gray-500 border-b">
+                  <th class="pb-4">User</th>
+                  <th class="pb-4">Online Time</th>
+                  <th class="pb-4">Country</th>
+                  <th class="pb-4">City</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y">
+                <tr class="py-3">
+                  <td class="py-4">@Hasor2154</td>
+                  <td>15 Sec</td>
+                  <td>USA</td>
+                  <td>USA</td>
+                </tr>
+                <tr>
+                  <td class="py-4">@wegp316_21</td>
+                  <td>25 Sec</td>
+                  <td>Germany</td>
+                  <td>Munich</td>
+                </tr>
+                <tr>
+                  <td class="py-4">@CreativeDen</td>
+                  <td>26 Sec</td>
+                  <td>Germany</td>
+                  <td>Berlin</td>
+                </tr>
+                <tr>
+                  <td class="py-4">Unknown</td>
+                  <td>40 Sec</td>
+                  <td>Ukraine</td>
+                  <td>Kiev</td>
+                </tr>
+                <tr>
+                  <td class="py-4">@Sandra2cd82</td>
+                  <td>2 Min</td>
+                  <td>France</td>
+                  <td>Paris</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- Make an Offer Section -->

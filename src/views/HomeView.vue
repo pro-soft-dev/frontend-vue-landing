@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCounterStore } from '@/stores/counter'
+import { useCounterStore } from '../stores/counter'
 
 const counter = useCounterStore()
 </script>
@@ -10,4 +10,4 @@ const counter = useCounterStore()
     <div>Count is: {{ counter.count }}</div>
     <button @click="counter.increment()">Increment</button>
   </main>
-</template> 
+</template>
