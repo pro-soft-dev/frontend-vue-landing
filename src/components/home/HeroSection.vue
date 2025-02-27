@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue";
+import ImageSwiper from "./ImageSwiper.vue";
 
 const currentImageIndex = ref(2);
 let slideshowIntervalId: number | undefined;
@@ -77,7 +78,7 @@ onUnmounted(() => {
     <div
       class="absolute bottom-[50px] left-0 right-0 justify-center items-center h-32 my-8 overflow-hidden hidden md:flex"
     >
-      <div class="flex items-center gap-4 transition-all duration-500">
+      <!-- <div class="flex items-center gap-4 transition-all duration-500">
         <div
           v-for="slideNum in orderedSlides"
           :key="`slide-${slideNum}-${currentImageIndex}`"
@@ -98,7 +99,8 @@ onUnmounted(() => {
             }"
           />
         </div>
-      </div>
+      </div> -->
+      <ImageSwiper />
     </div>
     <div
       class="absolute bottom-0 right-0 w-full h-5 bg-gradient-to-r from-orange-500 to-gray-500 overflow-visible"

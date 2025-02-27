@@ -1,0 +1,127 @@
+<template>
+  <div class="w-1/2 h-full">
+    <swiper
+      :effect="'coverflow'"
+      :grabCursor="true"
+      :centeredSlides="true"
+      :slidesPerView="5"
+      :spaceBetween="20"
+      :initialSlide="2"
+      :allowTouchMove="true"
+      :loop="true"
+      :loopedSlides="5"
+      :autoplay="{
+        delay: 2500,
+        disableOnInteraction: false,
+      }"
+      :coverflowEffect="{
+        rotate: 0,
+        stretch: 0,
+        depth: 0,
+        modifier: 2,
+        fade: true,
+        slideShadows: false,
+      }"
+      :modules="modules"
+      class="mySwiper"
+      @swiper="onSwiper"
+      @slideChange="handleSlideChange"
+    >
+      <swiper-slide
+        v-for="item in 10"
+        :key="item"
+        :class="['rounded-lg', 'opacity-transition']"
+      >
+        <img
+          :src="`/thumbnails/bottom-${(item % 5) + 1}.jpg`"
+          alt="slide image"
+          class="rounded-lg"
+        />
+      </swiper-slide>
+    </swiper>
+  </div>
+</template>
+
+<style scoped>
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+.swiper-wrapper {
+  border-radius: 20px !important;
+  transition: all 0.5s ease-in-out;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  opacity: 0.4;
+  transform: scale(0.8);
+  transition: all 0.5s ease-in-out;
+  border-radius: 20px;
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-slide-active {
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+.opacity-transition {
+  transition: opacity 0.5s ease-in-out;
+}
+</style>
+
+<script>
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+
+// import required modules
+import { Autoplay, EffectCoverflow } from "swiper/modules";
+import { ref } from "vue";
+
+export default {
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+    const swiperInstance = ref(null);
+
+    const onSwiper = (swiper) => {
+      swiperInstance.value = swiper;
+    };
+
+    const handleSlideChange = (swiper) => {
+      const realIndex = swiper.realIndex;
+      if (realIndex < 2) {
+        swiper.slideToLoop(2);
+      } else if (realIndex > 8) {
+        swiper.slideToLoop(8);
+      }
+    };
+
+    return {
+      modules: [Autoplay, EffectCoverflow],
+      handleSlideChange,
+      onSwiper,
+      swiperInstance,
+    };
+  },
+};
+</script>
