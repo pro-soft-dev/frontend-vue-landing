@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import BasePopup from '../../../components/common/BasePopup.vue'
+import BasePopup from "../../../components/common/BasePopup.vue";
 
 defineProps<{
-  show: boolean
-}>()
+  show: boolean;
+}>();
 </script>
 
 <template>
@@ -24,7 +24,8 @@ defineProps<{
       <div class="mt-6">
         <h4 class="font-medium mb-2">Description</h4>
         <p class="text-gray-600">
-          Detailed article about food experiences and culinary adventures in the heart of the city...
+          Detailed article about food experiences and culinary adventures in the
+          heart of the city...
         </p>
       </div>
     </div>
