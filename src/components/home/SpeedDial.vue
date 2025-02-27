@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { EllipsisHorizontalIcon, EnvelopeOpenIcon, XMarkIcon } from '@heroicons/vue/16/solid'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const actions = [
@@ -37,11 +38,10 @@ const emit = defineEmits<{
   <div class="fixed right-4 bottom-7 md:bottom-[50%] flex flex-col-reverse gap-2 md:transform md:translate-y-1/2">
     <!-- Toggle Button -->
     <button @click="isOpen = !isOpen"
-      :class="['w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors md:hidden']">
-      <svg class="w-6 h-6 transition-transform" :class="{ 'rotate-45': isOpen }" fill="none" stroke="currentColor"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-      </svg>
+      :class="['w-12 h-12 bg-orange-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-white hover:text-orange-600 transition-colors md:hidden']">
+
+      <XMarkIcon v-if="isOpen === true" class="w-6 h-6" />
+      <EllipsisHorizontalIcon v-else class="w-6 h-6" />
     </button>
 
     <!-- Action Buttons -->
@@ -49,8 +49,7 @@ const emit = defineEmits<{
       :class="isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 invisible'">
       <button v-for="action in actions" :key="action.name" @click="$emit('action', action.event)"
         class="w-12 h-12  rounded-full shadow-lg flex items-center justify-center group relative"
-        :class="action.name==='Post'? 'bg-orange-500 text-white hover:text-orange-white':'bg-white hover:bg-gray-50'"
-        >
+        :class="action.name === 'Post' ? 'bg-orange-500 text-white hover:text-orange-white' : 'bg-white hover:bg-gray-50'">
         <span class="sr-only">{{ action.name }}</span>
 
         <!-- Icon -->

@@ -37,6 +37,11 @@ const submitOffer = () => {
 }
 
 const canMakeOffer = computed(() => offerCount.value < maxOffers)
+
+const rangeBackground = computed(() => {
+  const percentage = ((offerAmount.value - minOffer) / (maxOffer - minOffer)) * 100
+  return `background: linear-gradient(to right, #f97316 ${percentage}%, #e5e7eb ${percentage}%)`
+})
 </script>
 
 <template>
@@ -86,8 +91,10 @@ const canMakeOffer = computed(() => offerCount.value < maxOffers)
         Make an Offer
       </button>
     </div>
-
-    <div class="mb-6">
+    <div class="my-4 md:hidden">
+      <span class="text-lg">MAKE A BID</span>
+    </div>
+    <div class="mb-6 hidden md:block">
       <div class="text-gray-600 mb-2">Price</div>
       <div class="text-xl font-bold">EUR {{ fixedPrice.toFixed(2) }}</div>
       <div class="text-sm text-gray-500">
@@ -96,8 +103,8 @@ const canMakeOffer = computed(() => offerCount.value < maxOffers)
     </div>
 
     <div class="mb-6">
-      <input type="range" v-model="offerAmount" :min="minOffer" :max="maxOffer"
-        class="w-full h-2 bg-orange-500 rounded-lg appearance-none">
+      <input type="range" v-model="offerAmount" :min="minOffer" :max="maxOffer" :style="rangeBackground"
+        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
       <div class="flex justify-between mt-2">
         <span class="text-sm text-gray-500">{{ minOffer }}$</span>
         <span class="text-sm text-gray-500">{{ maxOffer }}$</span>
