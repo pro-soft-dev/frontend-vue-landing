@@ -9,7 +9,7 @@
       :initialSlide="2"
       :allowTouchMove="true"
       :loop="true"
-      :loopedSlides="5"
+      :loopedSlides="10"
       :autoplay="{
         delay: 2500,
         disableOnInteraction: false,
@@ -35,7 +35,7 @@
         <img
           :src="`/thumbnails/bottom-${(item % 5) + 1}.jpg`"
           alt="slide image"
-          class="rounded-lg"
+          class="rounded-lg w-full h-full"
         />
       </swiper-slide>
     </swiper>
@@ -103,23 +103,8 @@ export default {
   setup() {
     const swiperInstance = ref(null);
 
-    const onSwiper = (swiper) => {
-      swiperInstance.value = swiper;
-    };
-
-    const handleSlideChange = (swiper) => {
-      const realIndex = swiper.realIndex;
-      if (realIndex < 2) {
-        swiper.slideToLoop(2);
-      } else if (realIndex > 8) {
-        swiper.slideToLoop(8);
-      }
-    };
-
     return {
       modules: [Autoplay, EffectCoverflow],
-      handleSlideChange,
-      onSwiper,
       swiperInstance,
     };
   },
