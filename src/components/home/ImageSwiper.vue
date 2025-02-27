@@ -7,6 +7,7 @@
       :slidesPerView="5"
       :spaceBetween="20"
       :initialSlide="2"
+      :freeMode="true"
       :allowTouchMove="true"
       :loop="true"
       :loopedSlides="10"
@@ -46,23 +47,21 @@
 .swiper {
   width: 100%;
   height: 100%;
+  padding: 10px 0;
 }
+
 .swiper-wrapper {
   border-radius: 20px !important;
-  transition: all 0.5s ease-in-out;
 }
+
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
-  opacity: 0.4;
-  transform: scale(0.8);
-  transition: all 0.5s ease-in-out;
+  background: transparent;
+  transform: scale(0.7);
+  transition: all 0.35s ease-in-out;
   border-radius: 20px;
-  /* Center slide text vertically */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: visible;
 }
 
 .swiper-slide img {
@@ -70,15 +69,23 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 20px;
+  opacity: 0.5;
+  transition: all 0.35s ease-in-out;
 }
 
 .swiper-slide-active {
+  transform: scale(1.3);
+  z-index: 2;
+}
+
+.swiper-slide-active img {
   opacity: 1;
-  transform: scale(1.5);
+  transform: scale(1.1);
 }
 
 .opacity-transition {
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
 }
 </style>
 
