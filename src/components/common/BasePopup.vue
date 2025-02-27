@@ -1,7 +1,8 @@
 <script setup lang="ts">
 defineProps<{
   show: boolean
-  title: string
+  title: string,
+  width?: string
 }>()
 
 const emit = defineEmits<{
@@ -12,7 +13,7 @@ const emit = defineEmits<{
 <template>
   <transition name="modal">
     <div v-if="show" class="fixed inset-0 bg-[#00000090] bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 w-[90%] max-w-2xl mx-4 relative">
+      <div :class="['bg-white rounded-lg p-6 max-w-2xl mx-4 relative', width || 'w-96']">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-xl font-semibold">{{ title }}</h3>
           <button @click="$emit('close')" class="text-gray-500 hover:text-gray-700">
@@ -32,6 +33,7 @@ const emit = defineEmits<{
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -41,6 +43,7 @@ const emit = defineEmits<{
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }

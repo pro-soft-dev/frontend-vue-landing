@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import BasePopup from '../common/BasePopup.vue'
 
 const selectedPaymentMethod = ref('paypal')
 const activeTab = ref('buy')
@@ -45,7 +46,7 @@ const rangeBackground = computed(() => {
 </script>
 
 <template>
-  <section class="payment-section bg-white rounded-lg p-6 mb-6">
+  <section class="payment-section bg-white rounded-lg p-6 md:p-10 mb-6">
     <h3 class="text-xl mb-4 hidden md:block">Payment Method</h3>
 
     <!-- Mobile Payment Method Select -->
@@ -60,7 +61,7 @@ const rangeBackground = computed(() => {
           Make an Offer
         </button>
       </div>
-      <button class="bg-orange-500 text-white w-full py-3">Buy Now</button>
+      <button class="bg-orange-500 text-white w-full py-3" @click="">Buy Now</button>
     </div>
 
     <!-- Payment Method Select -->
@@ -134,8 +135,8 @@ const rangeBackground = computed(() => {
     </div>
 
     <!-- Payment Modal -->
-    <div v-if="showPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 w-96 max-w-full mx-4">
+    <BasePopup :show="showPaymentModal" @close="closePaymentModal">
+      <div class="bg-white rounded-lg p-6 w-96 max-w-full">
         <div class="text-center mb-6">
           <div class="text-4xl font-bold mb-1">€{{ totalAmount.toFixed(2) }}</div>
           <div class="text-gray-600">EUR</div>
@@ -159,14 +160,8 @@ const rangeBackground = computed(() => {
         <button class="w-full py-3 border border-[#2C2E2F] rounded-full text-[#2C2E2F] font-medium">
           Pay with Debit or Credit Card
         </button>
-
-        <button @click="closePaymentModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
       </div>
-    </div>
+    </BasePopup>
   </section>
 </template>
 

@@ -51,7 +51,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="visitors-list bg-white rounded-lg shadow p-6 w-2/3">
+  <div class="visitors-list bg-white rounded-lg shadow p-6 pb-1 w-2/3">
     <div class="flex justify-between items-center mb-3">
       <div class="flex gap-1">
         <div class="text-lg text-black">Today</div>/
@@ -80,13 +80,13 @@ onMounted(() => {
     </div>
 
     <div v-else class="overflow-x-auto">
-      <table class="w-full">
+      <table class="w-full font-medium">
         <thead>
           <tr class="text-left text-gray-500">
-            <th class="font-medium">User List</th>
-            <th class="font-medium">Online Time</th>
-            <th class="font-medium">Country</th>
-            <th class="font-medium">City</th>
+            <th>User List</th>
+            <th>Online Time</th>
+            <th>Country</th>
+            <th>City</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200 text-black">

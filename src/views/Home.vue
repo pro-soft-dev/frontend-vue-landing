@@ -141,15 +141,19 @@ onUnmounted(() => {
           <span class="text-gray-400 text-lg">"Leckerschmecker : Food-Events"</span> Analytics :
         </h3>
         <div class="gap-3 items-center hidden md:flex">
-          <div class="analytics-grid flex flex-col gap-3 w-1/3">
+          <div class="analytics-grid flex flex-col gap-4 w-1/3">
             <div
-              class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between flex-col gap-8 py-12">
-              <div class="text-6xl font-bold">15135</div>
+              class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between flex-col gap-8 py-16">
+              <div class="text-7xl font-bold">15135</div>
               <div class="text-gray-500">Current Visitors</div>
             </div>
             <div class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between text-lg">
               <div class="text-gray-500">Total Views</div>
               <div class="font-bold">15135</div>
+            </div>
+            <div class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between text-lg">
+              <div class="text-gray-500">Total Bidders</div>
+              <div class="font-bold">654</div>
             </div>
             <div class="stat-card bg-white p-6 rounded-lg shadow flex items-center justify-between text-lg">
               <div class="text-gray-500">Average Bid</div>
@@ -271,13 +275,19 @@ onUnmounted(() => {
     <SpeedDial @action="handleSpeedDialAction" />
 
     <!-- Popups -->
-    <AuthorInfoPopup :show="showAuthorInfo" @close="showAuthorInfo = false" v-bind:class="{ 'modal-enter-active': showAuthorInfo }" />
-    <ArticleInfoPopup :show="showArticleInfo" @close="showArticleInfo = false" v-bind:class="{ 'modal-enter-active': showArticleInfo }" />
-    <SharePopup :show="showSharePopup" @close="showSharePopup = false" v-bind:class="{ 'modal-enter-active': showSharePopup }" />
-    <BidPopup :show="showBidPopup" @close="showBidPopup = false" v-bind:class="{ 'modal-enter-active': showBidPopup }" />
-    <AnalyticsPopup :show="showAnalytics" @close="showAnalytics = false" v-bind:class="{ 'modal-enter-active': showAnalytics }" />
+    <AuthorInfoPopup :show="showAuthorInfo" @close="showAuthorInfo = false"
+      v-bind:class="{ 'modal-enter-active': showAuthorInfo }" />
+    <ArticleInfoPopup :show="showArticleInfo" @close="showArticleInfo = false"
+      v-bind:class="{ 'modal-enter-active': showArticleInfo }" />
+    <SharePopup :show="showSharePopup" @close="showSharePopup = false"
+      v-bind:class="{ 'modal-enter-active': showSharePopup }" />
+    <BidPopup :show="showBidPopup" @close="showBidPopup = false"
+      v-bind:class="{ 'modal-enter-active': showBidPopup }" />
+    <AnalyticsPopup :show="showAnalytics" @close="showAnalytics = false"
+      v-bind:class="{ 'modal-enter-active': showAnalytics }" />
     <MapPopup :show="showMap" @close="showMap = false" v-bind:class="{ 'modal-enter-active': showMap }" />
-    <CreateAuctionPopup :show="showCreateAuction" @close="showCreateAuction = false" v-bind:class="{ 'modal-enter-active': showCreateAuction }" />
+    <CreateAuctionPopup :show="showCreateAuction" @close="showCreateAuction = false"
+      v-bind:class="{ 'modal-enter-active': showCreateAuction }" />
 
   </div>
 
@@ -337,6 +347,7 @@ input[type="range"]::-webkit-slider-thumb {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
