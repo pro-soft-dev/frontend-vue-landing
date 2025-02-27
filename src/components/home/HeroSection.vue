@@ -24,8 +24,9 @@ onUnmounted(() => {
 <template>
   <section
     class="hero relative h-[calc(100vh-theme('spacing.16')-theme('spacing.4')-theme('spacing.4')-theme('spacing.16'))]">
-    <img src="/images/hero-image.jpg" alt="Welcome" class="w-full h-full object-cover">
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
+    <img src="/images/hero-image.jpg" alt="Welcome" class="w-full h-full object-cover object-center">
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[100%] flex flex-col items-center justify-center text-white">
       <h1 class="text-4xl lg:text-5xl font-medium mb-6 text-center">Welcome Home</h1>
       <div class="play-button cursor-pointer">
         <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
