@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const currentImageIndex = ref(0)
+const currentImageIndex = ref(2)
 let slideshowIntervalId: number | undefined
 
 const startSlideshow = () => {
@@ -51,6 +51,12 @@ onUnmounted(() => {
               'opacity-60': currentImageIndex !== i - 1
             }">
         </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 right-0 w-full h-5 bg-gradient-to-r from-orange-500 to-gray-500 overflow-visible"
+      style="background: linear-gradient(to right, #ff6900 70%, #ffffff 70%);">
+      <div class="relative left-[70%] top-[-10px] transform -translate-y-full bg-white w-max p-2 font-bold">
+        10 Days Left
       </div>
     </div>
   </section>

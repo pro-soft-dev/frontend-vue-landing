@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EllipsisHorizontalIcon, EnvelopeOpenIcon, XMarkIcon } from '@heroicons/vue/16/solid'
+import { EllipsisHorizontalIcon, XMarkIcon } from '@heroicons/vue/16/solid'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const actions = [
@@ -29,7 +29,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkScreenSize)
 })
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'action', action: string): void
 }>()
 </script>

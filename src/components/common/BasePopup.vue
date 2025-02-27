@@ -1,11 +1,11 @@
 <script setup lang="ts">
 defineProps<{
   show: boolean
-  title: string,
+  title?: string,
   width?: string
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'close'): void
 }>()
 </script>
