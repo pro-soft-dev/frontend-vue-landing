@@ -61,7 +61,7 @@ const rangeBackground = computed(() => {
           Make an Offer
         </button>
       </div>
-      <button class="bg-orange-500 text-white w-full py-3" @click="">Buy Now</button>
+      <button class="bg-orange-500 text-white w-full py-3" @click="openPaymentModal">Buy Now</button>
     </div>
 
     <!-- Payment Method Select -->
