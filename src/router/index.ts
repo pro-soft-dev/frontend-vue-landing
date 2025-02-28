@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Create from '../views/Create.vue'
+import Diagram from '../views/Diagram.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -15,6 +16,11 @@ const routes: RouteRecordRaw[] = [
     // Lazy loading for about page
     component: Create
   },
+  {
+    path: '/diagram',
+    name: 'diagram',
+    component: Diagram
+  },
   // Add a catch-all route for unmatched paths
   {
     path: '/:pathMatch(.*)*',
@@ -23,7 +29,7 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 
