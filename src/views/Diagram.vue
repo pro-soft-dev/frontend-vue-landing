@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 
-const sliderPosition = ref(0);
+const sliderPosition = ref(50);
 const isDragging = ref(false);
 const sliderHandle = ref<HTMLElement | null>(null);
 const dragStartX = ref(0);
