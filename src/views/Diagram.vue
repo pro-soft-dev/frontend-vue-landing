@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen p-8">
+  <div class="min-h-screen p-8 overflow-hidden">
     <div class="max-w-6xl mx-auto">
       <h3 class="text-lg sm:text-2xl xl:text-5xl font-bold mb-3 md:mb-10">
         Diagram Page
