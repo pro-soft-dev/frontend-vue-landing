@@ -1,6 +1,10 @@
 <template>
   <div class="min-h-screen p-8">
     <div class="max-w-6xl mx-auto">
+      <h3 class="text-lg sm:text-2xl xl:text-5xl font-bold mb-3 md:mb-10">
+        Diagram Page
+      </h3>
+
       <!-- Horizontal Slider with Tooltip -->
       <div class="relative mb-16">
         <div class="w-full h-2 bg-gray-200 rounded-full">
