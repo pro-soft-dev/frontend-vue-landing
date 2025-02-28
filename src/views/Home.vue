@@ -35,7 +35,8 @@ const router = useRouter();
 const handleSpeedDialAction = (action: string) => {
   switch (action) {
     case "info":
-      showArticleInfo.value = true;
+      // showArticleInfo.value = true;
+      router.push("/diagram");
       break;
     case "author":
       showAuthorInfo.value = true;
