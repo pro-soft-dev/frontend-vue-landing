@@ -10,19 +10,13 @@
         <div class="w-full h-2 bg-gray-200 rounded-full">
           <div
             class="absolute w-8 h-8 -mt-3 transform -translate-x-1/2 cursor-grab active:cursor-grabbing transition-all duration-75 group"
-            :style="{ left: `${sliderPosition}%` }"
-            @mousedown="startDragging"
-            ref="sliderHandle"
-          >
+            :style="{ left: `${sliderPosition}%` }" @mousedown="startDragging" ref="sliderHandle">
             <!-- Tooltip -->
             <div
-              class="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
-            >
+              class="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
               Value: {{ Math.round(sliderPosition) }}%
             </div>
-            <div
-              class="w-full h-full bg-green-500 rounded-full shadow-lg transition-transform hover:scale-110"
-            />
+            <div class="w-full h-full bg-green-500 rounded-full shadow-lg transition-transform hover:scale-110" />
           </div>
         </div>
       </div>
@@ -33,19 +27,13 @@
           <div class=""></div>
         </div>
         <!-- Center Bar -->
-        <div
-          class="absolute left-1/2 bottom-0 w-2 bg-indigo-400 rounded-t transform -translate-x-1/2 transition-all duration-500"
-          :style="{ height: `${centerBarHeight}%` }"
-        ></div>
+        <div class="absolute left-1/2 bottom-0 w-4 bg-indigo-400 rounded-t transform -translate-x-1/2 .center-bar"
+          :style="{ height: `${centerBarHeight}%` }"></div>
 
         <!-- Wings -->
-        <svg
-          class="w-full h-full"
-          viewBox="0 0 800 400"
-          preserveAspectRatio="none"
-        >
+        <svg class="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
           <!-- Left Wing -->
-          <path :d="leftWingPath" fill="#ffb86ae0" />
+          <path :d="leftWingPath" fill="#ffb86aa0" />
 
           <!-- Right Wing -->
           <path :d="rightWingPath" fill="#ffb86ae0" />
@@ -59,11 +47,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 
-const sliderPosition = ref(50);
+const sliderPosition = ref(0);
 const isDragging = ref(false);
 const sliderHandle = ref<HTMLElement | null>(null);
 const dragStartX = ref(0);
 const dragStartPosition = ref(0);
+
+const animationFrameId = ref<number | null>(null);
+const touchX = ref<number | null>(null);
 
 // Computed values based on slider position
 const centerBarHeight = computed(() => sliderPosition.value);
@@ -71,9 +62,9 @@ const centerBarHeight = computed(() => sliderPosition.value);
 // Calculate wing paths based on slider position
 const leftWingPath = computed(() => {
   const height = centerBarHeight.value;
-  const tipHeight = height * 4; // Outer tip height
-  const controlY1 = 400 - tipHeight * 0.9; // First control point
-  const controlY2 = 400 - tipHeight * 0.7; // Second control point
+  const tipHeight = height * 4;
+  const controlY1 = 400 - tipHeight * 0.1;
+  const controlY2 = 400 - tipHeight * 0.1;
   return `
     M 400,400
     C 300,${controlY2} 150,${controlY1} 0,${400 - tipHeight}
@@ -84,9 +75,9 @@ const leftWingPath = computed(() => {
 
 const rightWingPath = computed(() => {
   const height = centerBarHeight.value;
-  const tipHeight = height * 4; // Outer tip height
-  const controlY1 = 400 - tipHeight * 0.9; // First control point
-  const controlY2 = 400 - tipHeight * 0.7; // Second control point
+  const tipHeight = height * 4;
+  const controlY1 = 400 - tipHeight * 0.1;
+  const controlY2 = 400 - tipHeight * 0.1;
   return `
     M 400,400
     C 500,${controlY2} 650,${controlY1} 800,${400 - tipHeight}
@@ -135,24 +126,51 @@ const stopDragging = () => {
   document.body.style.userSelect = "";
 };
 
-// Updated touch events for mobile
-const handleTouch = (e: TouchEvent) => {
-  if (!isDragging.value || !sliderHandle.value) return;
+const updateSliderPosition = () => {
+  if (!isDragging.value || !sliderHandle.value || touchX.value === null) return;
 
   const slider = sliderHandle.value.parentElement;
   if (!slider) return;
 
-  const touch = e.touches[0];
   const rect = slider.getBoundingClientRect();
-  const x = Math.max(0, Math.min(touch.clientX - rect.left, rect.width));
-  sliderPosition.value = (x / rect.width) * 100;
+  const relativeX = touchX.value - rect.left;
+  let newPosition = (relativeX / rect.width) * 100;
+  newPosition = Math.max(0, Math.min(100, newPosition));
+
+  sliderPosition.value = newPosition;
+
+  animationFrameId.value = requestAnimationFrame(updateSliderPosition);
+};
+
+const handleTouch = (e: TouchEvent) => {
+  if (!isDragging.value) return;
+  e.preventDefault();
+
+  const touch = e.touches[0];
+  touchX.value = touch.clientX;
+
+  if (animationFrameId.value === null) {
+    animationFrameId.value = requestAnimationFrame(updateSliderPosition);
+  }
 };
 
 const startTouchDrag = (e: TouchEvent) => {
   isDragging.value = true;
   const touch = e.touches[0];
-  dragStartX.value = touch.clientX;
-  dragStartPosition.value = sliderPosition.value;
+  touchX.value = touch.clientX;
+  e.preventDefault();
+
+  animationFrameId.value = requestAnimationFrame(updateSliderPosition);
+};
+
+const stopTouchDrag = () => {
+  isDragging.value = false;
+  touchX.value = null;
+
+  if (animationFrameId.value !== null) {
+    cancelAnimationFrame(animationFrameId.value);
+    animationFrameId.value = null;
+  }
 };
 
 const globalKeyDownHandler = (e: KeyboardEvent) => {
@@ -174,13 +192,10 @@ const globalKeyDownHandler = (e: KeyboardEvent) => {
 
 onMounted(() => {
   if (sliderHandle.value) {
-    sliderHandle.value.addEventListener("touchmove", handleTouch);
-    sliderHandle.value.addEventListener("touchstart", startTouchDrag);
-    sliderHandle.value.addEventListener(
-      "touchend",
-      () => (isDragging.value = false)
-    );
-
+    sliderHandle.value.addEventListener("touchmove", handleTouch, { passive: false });
+    sliderHandle.value.addEventListener("touchstart", startTouchDrag, { passive: false });
+    sliderHandle.value.addEventListener("touchend", stopTouchDrag);
+    sliderHandle.value.addEventListener("touchcancel", stopTouchDrag);
     window.addEventListener("keydown", globalKeyDownHandler);
   }
 });
@@ -189,17 +204,20 @@ onUnmounted(() => {
   if (sliderHandle.value) {
     sliderHandle.value.removeEventListener("touchmove", handleTouch);
     sliderHandle.value.removeEventListener("touchstart", startTouchDrag);
-    sliderHandle.value.removeEventListener(
-      "touchend",
-      () => (isDragging.value = false)
-    );
+    sliderHandle.value.removeEventListener("touchend", stopTouchDrag);
+    sliderHandle.value.removeEventListener("touchcancel", stopTouchDrag);
     window.removeEventListener("keydown", globalKeyDownHandler);
+  }
+
+  if (animationFrameId.value !== null) {
+    cancelAnimationFrame(animationFrameId.value);
   }
 });
 </script>
 
 <style scoped>
-path {
-  transition: d 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+path,
+.center-bar {
+  transition: d 0.1s linear;
 }
 </style>
