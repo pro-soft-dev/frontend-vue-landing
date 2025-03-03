@@ -48,6 +48,9 @@
         <div
           class="absolute left-1/2 bottom-0 w-10 bg-white rounded-t transform -translate-x-1/2 border border-gray-300 border-b-0 flex flex-col items-center justify-between"
           :style="{ height: `${sliderPosition}%` }"
+          :class="{
+            'border-t-0': sliderPosition === 0,
+          }"
         >
           <!-- Control Buttons -->
           <div
