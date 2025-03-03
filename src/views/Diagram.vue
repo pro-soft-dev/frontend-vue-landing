@@ -53,16 +53,17 @@
           <!-- Control Buttons -->
           <div
             class="absolute -left-2 -right-2 bottom-full transform translate-y-1/2 flex justify-between"
+            ref="controlButtons"
           >
             <button
               @click="moveBarLeft"
               class="relative w-4 h-4 bg-white rounded-full shadow shadow-gray-300 hover:bg-gray-300 items-center justify-center transition-all duration-300"
               aria-label="Move bar left"
               :class="{
-                'opacity-0': sliderPosition === 0 || sliderPosition === 100,
+                'opacity-0': sliderPosition === 0,
               }"
-              @mousedown="startDragging"
-              @touchstart="startTouchDrag"
+              @mousedown="startButtonDragging"
+              @touchstart="startButtonTouchDrag"
             >
               <span
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
@@ -74,10 +75,10 @@
               class="relative w-4 h-4 bg-white rounded-full shadow shadow-gray-300 hover:bg-gray-300 items-center justify-center transition-all duration-300"
               aria-label="Move bar right"
               :class="{
-                'opacity-0': sliderPosition === 0 || sliderPosition === 100,
+                'opacity-0': sliderPosition === 0,
               }"
-              @mousedown="startDragging"
-              @touchstart="startTouchDrag"
+              @mousedown="startButtonDragging"
+              @touchstart="startButtonTouchDrag"
             >
               <span
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
@@ -128,6 +129,8 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 
 const sliderPosition = ref(0);
 const sliderHandle = ref<HTMLElement | null>(null);
+const controlButtons = ref<HTMLElement | null>(null);
+
 const isDragging = ref(false);
 
 // Wing path calculations
@@ -198,7 +201,67 @@ const stopDragging = () => {
   document.removeEventListener("mouseup", stopDragging);
 };
 
+const startButtonDragging = (e: MouseEvent) => {
+  e.preventDefault();
+  isDragging.value = true;
+  document.addEventListener("mousemove", handleButtonDrag);
+  document.addEventListener("mouseup", stopButtonDrag);
+};
+
+const handleButtonDrag = (e: MouseEvent) => {
+  if (!isDragging.value) return;
+  if (!controlButtons.value) return;
+
+  const diagram = controlButtons.value.parentElement?.parentElement;
+  if (!diagram) return;
+
+  const rect = diagram.getBoundingClientRect();
+  const relativeY = rect.bottom - e.clientY;
+
+  let newPosition = (relativeY / rect.height) * 100;
+  newPosition = Math.max(0, Math.min(100, newPosition));
+
+  sliderPosition.value = newPosition;
+};
+
+const stopButtonDrag = () => {
+  isDragging.value = false;
+  document.removeEventListener("mousemove", handleButtonDrag);
+  document.removeEventListener("mouseup", stopButtonDrag);
+};
+
 // Touch controls
+const handleButtonTouch = (e: TouchEvent) => {
+  if (!isDragging.value) return;
+  e.preventDefault();
+  const touch = e.touches[0];
+  const diagram = controlButtons.value?.parentElement?.parentElement;
+  if (!diagram) return;
+
+  const rect = diagram.getBoundingClientRect();
+  const relativeY = rect.bottom - touch.clientY;
+
+  let newPosition = (relativeY / rect.height) * 100;
+  newPosition = Math.max(0, Math.min(100, newPosition));
+
+  sliderPosition.value = newPosition;
+};
+
+const startButtonTouchDrag = (e: TouchEvent) => {
+  isDragging.value = true;
+  e.preventDefault();
+  document.addEventListener("touchmove", handleButtonTouch, {
+    passive: false,
+  });
+  document.addEventListener("touchend", stopButtonTouchDrag);
+};
+
+const stopButtonTouchDrag = () => {
+  isDragging.value = false;
+  document.removeEventListener("touchmove", handleButtonTouch);
+  document.removeEventListener("touchend", stopButtonTouchDrag);
+};
+
 const handleTouch = (e: TouchEvent) => {
   if (!isDragging.value) return;
   e.preventDefault();
