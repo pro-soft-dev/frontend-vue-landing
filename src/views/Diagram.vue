@@ -54,8 +54,12 @@
         >
           <!-- Control Buttons -->
           <div
-            class="absolute -left-2 -right-2 bottom-full transform translate-y-1/2 flex justify-between"
+            class="absolute -left-2 -right-2 bottom-full transform translate-y-1/2 flex justify-between transition-all duration-300"
             ref="controlButtons"
+            :style="{
+              transform:
+                sliderPosition > 1 ? 'translateY(0)' : 'translateY(-50%)',
+            }"
           >
             <button
               @click="moveBarLeft"
@@ -170,7 +174,7 @@ const leftWingPath = computed(() => {
   const controlY1 = 400 - tipHeight * 0.1;
   const controlY2 = 400 - tipHeight * 0.1;
   return `
-    M 400,400
+    M 385,400
     C 300,${controlY2} 150,${controlY1} 0,${400 - tipHeight}
     L 0,400 
     Z
@@ -183,7 +187,7 @@ const rightWingPath = computed(() => {
   const controlY1 = 400 - tipHeight * 0.1;
   const controlY2 = 400 - tipHeight * 0.1;
   return `
-    M 400,400
+    M 415,400
     C 500,${controlY2} 650,${controlY1} 800,${400 - tipHeight}
     L 800,400 
     Z
