@@ -23,13 +23,15 @@
         <!-- Slider Handle -->
         <div
           ref="sliderHandle"
-          class="absolute w-8 h-8 top-0 -mt-3 transform -translate-x-1/2 cursor-grab active:cursor-grabbing focus:outline-none focus:ring-2 focus:ring-orange-500 group transition-transform hover:scale-110"
+          class="absolute w-8 h-4 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing group transition-transform hover:scale-110 rounded-r-xl rounded-l-xl"
           :style="{ left: `${sliderPosition}%` }"
           @mousedown="startDragging"
           @touchstart="startTouchDrag"
-          tabindex="0"
         >
-          <div class="w-full h-full bg-green-500 rounded-full shadow-xl">
+          <div
+            class="w-full h-full bg-white rounded-full shadow-xl text-center"
+          >
+            <span class="handle-icon"></span>
             <!-- Tooltip -->
             <div
               class="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
@@ -162,7 +164,7 @@ const rightWingPath = computed(() => {
 
 // Color calculations
 const getWingColor = (side: "left" | "right") => {
-  const opacity = 0.7 + sliderPosition.value / 250;
+  const opacity = Math.max(0.7 + sliderPosition.value / 250, 1) * 0.8;
   return side === "left"
     ? `rgba(255, 184, 106, ${opacity})`
     : `rgba(251, 44, 54, ${opacity})`;
@@ -322,3 +324,30 @@ onUnmounted(() => {
   document.removeEventListener("touchend", stopTouchDrag);
 });
 </script>
+<style scoped>
+.handle-icon {
+  position: relative;
+  width: 0;
+}
+.handle-icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  height: 8px;
+  border-left: 1px solid #ff6900;
+  border-right: 1px solid #ff6900;
+  width: 15px;
+}
+.handle-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  height: 8px;
+  border-left: 1px solid #ff6900;
+  width: 0px;
+}
+</style>
