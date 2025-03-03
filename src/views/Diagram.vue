@@ -171,8 +171,8 @@ const isDragging = ref(false);
 const leftWingPath = computed(() => {
   const height = sliderPosition.value;
   const tipHeight = height * 4;
-  const controlY1 = 400 - tipHeight * 0.1;
-  const controlY2 = 400 - tipHeight * 0.1;
+  const controlY1 = 400 - tipHeight * 0.07;
+  const controlY2 = 400 - tipHeight * 0.07;
   return `
     M 385,400
     C 300,${controlY2} 150,${controlY1} 0,${400 - tipHeight}
@@ -184,8 +184,8 @@ const leftWingPath = computed(() => {
 const rightWingPath = computed(() => {
   const height = sliderPosition.value;
   const tipHeight = height * 4;
-  const controlY1 = 400 - tipHeight * 0.1;
-  const controlY2 = 400 - tipHeight * 0.1;
+  const controlY1 = 400 - tipHeight * 0.07;
+  const controlY2 = 400 - tipHeight * 0.07;
   return `
     M 415,400
     C 500,${controlY2} 650,${controlY1} 800,${400 - tipHeight}
