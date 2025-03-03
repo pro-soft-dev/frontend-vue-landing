@@ -1,43 +1,97 @@
 <template>
   <div class="min-h-screen p-8 overflow-hidden">
+    <h3 class="text-4xl my-4 mb-12">Diagram</h3>
     <div class="max-w-6xl mx-auto">
-      <h3 class="text-lg sm:text-2xl xl:text-5xl font-bold mb-3 md:mb-10">
-        Diagram Page
-      </h3>
-
-      <!-- Horizontal Slider with Tooltip -->
-      <div class="relative mb-16">
+      <!-- Horizontal Slider -->
+      <div
+        class="relative mb-16"
+        role="slider"
+        aria-label="Bid control slider"
+        :aria-valuenow="sliderPosition"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <!-- Slider Track -->
         <div class="w-full h-2 bg-gray-200 rounded-full">
-          <div class="absolute w-8 h-8 -mt-3 transform -translate-x-1/2 cursor-grab active:cursor-grabbing  group"
-            :style="{ left: `${sliderPosition}%` }" @mousedown="startDragging" ref="sliderHandle">
+          <!-- Active Track -->
+          <div
+            class="h-full bg-orange-500 rounded-full"
+            :style="{ width: `${sliderPosition}%` }"
+          ></div>
+        </div>
+
+        <!-- Slider Handle -->
+        <div
+          ref="sliderHandle"
+          class="absolute w-8 h-8 top-0 -mt-3 transform -translate-x-1/2 cursor-grab active:cursor-grabbing focus:outline-none focus:ring-2 focus:ring-orange-500 group transition-transform hover:scale-110"
+          :style="{ left: `${sliderPosition}%` }"
+          @mousedown="startDragging"
+          @touchstart="startTouchDrag"
+          tabindex="0"
+        >
+          <div class="w-full h-full bg-green-500 rounded-full shadow-lg">
             <!-- Tooltip -->
             <div
-              class="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-              Value: {{ Math.round(sliderPosition) }}%
+              class="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
+            >
+              {{ Math.round(sliderPosition) }}%
             </div>
-            <div class="w-full h-full bg-green-500 rounded-full shadow-lg transition-transform hover:scale-110" />
           </div>
         </div>
       </div>
 
       <!-- Diagram -->
       <div class="relative h-[400px]">
-        <div class="absolute top-0 left-0 bg-red-500 flex flex-col">
-          <div class=""></div>
-        </div>
         <!-- Center Bar -->
-        <div class="absolute left-1/2 bottom-0 w-4 bg-indigo-400 rounded-t transform -translate-x-1/2 .center-bar"
-          :style="{ height: `${centerBarHeight}%` }"></div>
+        <div
+          class="absolute left-1/2 bottom-0 w-8 bg-gray-400 rounded-t transform -translate-x-1/2"
+          :style="{ height: `${sliderPosition}%` }"
+        >
+          <!-- Control Buttons -->
+          <div
+            class="absolute -left-3 -right-3 bottom-full transform -translate-y-1 flex justify-between"
+          >
+            <button
+              @click="moveBarLeft"
+              class="relative w-4 h-4 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 items-center justify-center transition-all duration-300"
+              aria-label="Move bar left"
+              :class="{
+                'opacity-0': sliderPosition === 0 || sliderPosition === 100,
+              }"
+            >
+              <span
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+                >&larr;</span
+              >
+            </button>
+            <button
+              @click="moveBarRight"
+              class="relative w-4 h-4 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 items-center justify-center transition-all duration-300"
+              aria-label="Move bar right"
+              :class="{
+                'opacity-0': sliderPosition === 0 || sliderPosition === 100,
+              }"
+            >
+              <span
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+                >&rarr;</span
+              >
+            </button>
+          </div>
+        </div>
 
         <!-- Wings -->
-        <svg class="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
-          <!-- Left Wing -->
-          <path :d="leftWingPath" fill="#ffb86aa0" />
-
-          <!-- Right Wing -->
-          <path :d="rightWingPath" fill="#fb2c36a8" />
+        <svg
+          class="w-full h-full"
+          viewBox="0 0 800 400"
+          preserveAspectRatio="none"
+        >
+          <path :d="leftWingPath" :fill="getWingColor('left')" />
+          <path :d="rightWingPath" :fill="getWingColor('right')" />
         </svg>
-        <div class="bg-indigo-400 w-full h-4"></div>
+
+        <!-- Base Line -->
+        <div class="w-full h-4 bg-gray-400"></div>
       </div>
     </div>
   </div>
@@ -47,20 +101,12 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 
 const sliderPosition = ref(0);
-const isDragging = ref(false);
 const sliderHandle = ref<HTMLElement | null>(null);
-const dragStartX = ref(0);
-const dragStartPosition = ref(0);
+const isDragging = ref(false);
 
-const animationFrameId = ref<number | null>(null);
-const touchX = ref<number | null>(null);
-
-// Computed values based on slider position
-const centerBarHeight = computed(() => sliderPosition.value);
-
-// Calculate wing paths based on slider position
+// Wing path calculations
 const leftWingPath = computed(() => {
-  const height = centerBarHeight.value;
+  const height = sliderPosition.value;
   const tipHeight = height * 4;
   const controlY1 = 400 - tipHeight * 0.1;
   const controlY2 = 400 - tipHeight * 0.1;
@@ -73,7 +119,7 @@ const leftWingPath = computed(() => {
 });
 
 const rightWingPath = computed(() => {
-  const height = centerBarHeight.value;
+  const height = sliderPosition.value;
   const tipHeight = height * 4;
   const controlY1 = 400 - tipHeight * 0.1;
   const controlY2 = 400 - tipHeight * 0.1;
@@ -85,138 +131,105 @@ const rightWingPath = computed(() => {
   `;
 });
 
-// Updated slider drag functionality
-const startDragging = (e: MouseEvent) => {
-  isDragging.value = true;
-  dragStartX.value = e.clientX;
-  dragStartPosition.value = sliderPosition.value;
-
-  document.addEventListener("mousemove", handleDrag);
-  document.addEventListener("mouseup", stopDragging);
-
-  // Add cursor styles to indicate dragging
-  document.body.style.cursor = "grabbing";
-  document.body.style.userSelect = "none";
+// Color calculations
+const getWingColor = (side: "left" | "right") => {
+  const opacity = 0.6 + sliderPosition.value / 250;
+  return side === "left"
+    ? `rgba(255, 184, 106, ${opacity})`
+    : `rgba(251, 44, 54, ${opacity})`;
 };
 
-const handleDrag = (e: MouseEvent) => {
-  if (!isDragging.value || !sliderHandle.value) return;
+// Slider controls
+const updateSliderPosition = (clientX: number) => {
+  if (!sliderHandle.value) return;
 
   const slider = sliderHandle.value.parentElement;
   if (!slider) return;
 
   const rect = slider.getBoundingClientRect();
-  const deltaX = e.clientX - dragStartX.value;
-  const percentageDelta = (deltaX / rect.width) * 100;
-
-  let newPosition = dragStartPosition.value + percentageDelta;
-  newPosition = Math.max(0, Math.min(100, newPosition));
-
-  sliderPosition.value = newPosition;
-};
-
-const stopDragging = () => {
-  isDragging.value = false;
-  document.removeEventListener("mousemove", handleDrag);
-  document.removeEventListener("mouseup", stopDragging);
-
-  // Reset cursor styles
-  document.body.style.cursor = "";
-  document.body.style.userSelect = "";
-};
-
-const updateSliderPosition = () => {
-  if (!isDragging.value || !sliderHandle.value || touchX.value === null) return;
-
-  const slider = sliderHandle.value.parentElement;
-  if (!slider) return;
-
-  const rect = slider.getBoundingClientRect();
-  const relativeX = touchX.value - rect.left;
+  const relativeX = clientX - rect.left;
   let newPosition = (relativeX / rect.width) * 100;
   newPosition = Math.max(0, Math.min(100, newPosition));
 
   sliderPosition.value = newPosition;
-
-  animationFrameId.value = requestAnimationFrame(updateSliderPosition);
 };
 
+const startDragging = (e: MouseEvent) => {
+  e.preventDefault();
+  isDragging.value = true;
+  document.addEventListener("mousemove", handleMouseDrag);
+  document.addEventListener("mouseup", stopDragging);
+};
+
+const handleMouseDrag = (e: MouseEvent) => {
+  if (!isDragging.value) return;
+  updateSliderPosition(e.clientX);
+};
+
+const stopDragging = () => {
+  isDragging.value = false;
+  document.removeEventListener("mousemove", handleMouseDrag);
+  document.removeEventListener("mouseup", stopDragging);
+};
+
+// Touch controls
 const handleTouch = (e: TouchEvent) => {
   if (!isDragging.value) return;
   e.preventDefault();
-
   const touch = e.touches[0];
-  touchX.value = touch.clientX;
-
-  if (animationFrameId.value === null) {
-    animationFrameId.value = requestAnimationFrame(updateSliderPosition);
-  }
+  updateSliderPosition(touch.clientX);
 };
 
 const startTouchDrag = (e: TouchEvent) => {
   isDragging.value = true;
-  const touch = e.touches[0];
-  touchX.value = touch.clientX;
   e.preventDefault();
-
-  animationFrameId.value = requestAnimationFrame(updateSliderPosition);
+  document.addEventListener("touchmove", handleTouch, { passive: false });
+  document.addEventListener("touchend", stopTouchDrag);
 };
 
 const stopTouchDrag = () => {
   isDragging.value = false;
-  touchX.value = null;
-
-  if (animationFrameId.value !== null) {
-    cancelAnimationFrame(animationFrameId.value);
-    animationFrameId.value = null;
-  }
+  document.removeEventListener("touchmove", handleTouch);
+  document.removeEventListener("touchend", stopTouchDrag);
 };
 
-const globalKeyDownHandler = (e: KeyboardEvent) => {
-  if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
-    e.preventDefault();
-    sliderPosition.value -= 1;
-    if (sliderPosition.value < 0) {
-      sliderPosition.value = 0;
-    }
-  }
-  if (e.key === "ArrowRight" || e.key === "ArrowUp") {
-    e.preventDefault();
-    sliderPosition.value += 1;
-    if (sliderPosition.value > 100) {
-      sliderPosition.value = 100;
-    }
-  }
+// Bar position controls
+const moveStep = 1; // Amount to move the slider by
+
+const moveBarLeft = (e?: MouseEvent) => {
+  e?.preventDefault();
+  sliderPosition.value = Math.max(0, sliderPosition.value - moveStep);
+};
+
+const moveBarRight = (e?: MouseEvent) => {
+  e?.preventDefault();
+  sliderPosition.value = Math.min(100, sliderPosition.value + moveStep);
 };
 
 onMounted(() => {
-  if (sliderHandle.value) {
-    sliderHandle.value.addEventListener("touchmove", handleTouch, { passive: false });
-    sliderHandle.value.addEventListener("touchstart", startTouchDrag, { passive: false });
-    sliderHandle.value.addEventListener("touchend", stopTouchDrag);
-    sliderHandle.value.addEventListener("touchcancel", stopTouchDrag);
-    window.addEventListener("keydown", globalKeyDownHandler);
-  }
+  // Add global keyboard listener
+  document.addEventListener("keydown", (e) => {
+    // Handle keyboard controls when slider handle is focused or no element is focused
+    if (
+      document.activeElement === sliderHandle.value ||
+      document.activeElement === document.body
+    ) {
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+        e.preventDefault();
+        moveBarLeft();
+      }
+      if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+        e.preventDefault();
+        moveBarRight();
+      }
+    }
+  });
 });
 
 onUnmounted(() => {
-  if (sliderHandle.value) {
-    sliderHandle.value.removeEventListener("touchmove", handleTouch);
-    sliderHandle.value.removeEventListener("touchstart", startTouchDrag);
-    sliderHandle.value.removeEventListener("touchend", stopTouchDrag);
-    sliderHandle.value.removeEventListener("touchcancel", stopTouchDrag);
-    window.removeEventListener("keydown", globalKeyDownHandler);
-  }
-
-  if (animationFrameId.value !== null) {
-    cancelAnimationFrame(animationFrameId.value);
-  }
+  document.removeEventListener("mousemove", handleMouseDrag);
+  document.removeEventListener("mouseup", stopDragging);
+  document.removeEventListener("touchmove", handleTouch);
+  document.removeEventListener("touchend", stopTouchDrag);
 });
 </script>
-
-<style scoped>
-/* path,
-.center-bar {
-  transition: d 0.1s linear;
-} */
-</style>
