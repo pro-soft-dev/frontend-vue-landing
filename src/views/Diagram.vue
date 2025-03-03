@@ -8,8 +8,7 @@
       <!-- Horizontal Slider with Tooltip -->
       <div class="relative mb-16">
         <div class="w-full h-2 bg-gray-200 rounded-full">
-          <div
-            class="absolute w-8 h-8 -mt-3 transform -translate-x-1/2 cursor-grab active:cursor-grabbing transition-all duration-75 group"
+          <div class="absolute w-8 h-8 -mt-3 transform -translate-x-1/2 cursor-grab active:cursor-grabbing  group"
             :style="{ left: `${sliderPosition}%` }" @mousedown="startDragging" ref="sliderHandle">
             <!-- Tooltip -->
             <div
