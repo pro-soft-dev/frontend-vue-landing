@@ -215,8 +215,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-path,
+/* path,
 .center-bar {
   transition: d 0.1s linear;
-}
+} */
 </style>
