@@ -29,7 +29,7 @@
           @touchstart="startTouchDrag"
           tabindex="0"
         >
-          <div class="w-full h-full bg-green-500 rounded-full shadow-lg">
+          <div class="w-full h-full bg-green-500 rounded-full shadow-xl">
             <!-- Tooltip -->
             <div
               class="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
@@ -44,20 +44,25 @@
       <div class="relative h-[400px]">
         <!-- Center Bar -->
         <div
-          class="absolute left-1/2 bottom-0 w-8 bg-gray-400 rounded-t transform -translate-x-1/2"
+          class="absolute left-1/2 bottom-0 w-10 bg-white rounded-t transform -translate-x-1/2 border border-gray-300 border-b-0"
           :style="{ height: `${sliderPosition}%` }"
+          :class="{
+            'border-none': sliderPosition === 0,
+          }"
         >
           <!-- Control Buttons -->
           <div
-            class="absolute -left-3 -right-3 bottom-full transform -translate-y-1 flex justify-between"
+            class="absolute -left-2 -right-2 bottom-full transform translate-y-1/2 flex justify-between"
           >
             <button
               @click="moveBarLeft"
-              class="relative w-4 h-4 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 items-center justify-center transition-all duration-300"
+              class="relative w-4 h-4 bg-white rounded-full shadow shadow-gray-300 hover:bg-gray-300 items-center justify-center transition-all duration-300"
               aria-label="Move bar left"
               :class="{
                 'opacity-0': sliderPosition === 0 || sliderPosition === 100,
               }"
+              @mousedown="startDragging"
+              @touchstart="startTouchDrag"
             >
               <span
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
@@ -66,11 +71,13 @@
             </button>
             <button
               @click="moveBarRight"
-              class="relative w-4 h-4 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 items-center justify-center transition-all duration-300"
+              class="relative w-4 h-4 bg-white rounded-full shadow shadow-gray-300 hover:bg-gray-300 items-center justify-center transition-all duration-300"
               aria-label="Move bar right"
               :class="{
                 'opacity-0': sliderPosition === 0 || sliderPosition === 100,
               }"
+              @mousedown="startDragging"
+              @touchstart="startTouchDrag"
             >
               <span
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
@@ -91,7 +98,26 @@
         </svg>
 
         <!-- Base Line -->
-        <div class="w-full h-4 bg-gray-400"></div>
+        <div class="w-full h-6 flex relative">
+          <div
+            :class="`h-full w-1/2`"
+            :style="{
+              background: getWingColor('left'),
+            }"
+          ></div>
+          <div
+            :class="`h-full w-1/2`"
+            :style="{
+              background: getWingColor('right'),
+            }"
+          ></div>
+          <div
+            class="absolute left-1/2 -translate-x-1/2 w-10 h-full border border-gray-300 border-t-0 border-b-0"
+            :style="{
+              background: 'white',
+            }"
+          ></div>
+        </div>
       </div>
     </div>
   </div>
@@ -133,7 +159,7 @@ const rightWingPath = computed(() => {
 
 // Color calculations
 const getWingColor = (side: "left" | "right") => {
-  const opacity = 0.6 + sliderPosition.value / 250;
+  const opacity = 0.7 + sliderPosition.value / 250;
   return side === "left"
     ? `rgba(255, 184, 106, ${opacity})`
     : `rgba(251, 44, 54, ${opacity})`;
