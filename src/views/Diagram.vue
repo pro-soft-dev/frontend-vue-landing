@@ -360,15 +360,18 @@ onUnmounted(() => {
 </script>
 <style scoped>
 .handle-icon {
-  position: relative;
-  width: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
 }
 .handle-icon::before {
   content: "";
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, -50%);
   height: 8px;
   border-left: 1px solid #ff6900;
   border-right: 1px solid #ff6900;
@@ -379,7 +382,7 @@ onUnmounted(() => {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, -50%);
   height: 8px;
   border-left: 1px solid #ff6900;
   width: 0px;
