@@ -61,9 +61,6 @@
               @click="moveBarLeft"
               class="relative w-4 h-4 bg-white rounded-full shadow shadow-gray-300 hover:bg-gray-300 items-center justify-center transition-all duration-300"
               aria-label="Move bar left"
-              :class="{
-                'opacity-0': sliderPosition === 0,
-              }"
               @mousedown="startButtonDragging"
               @touchstart="startButtonTouchDrag"
             >
@@ -76,9 +73,6 @@
               @click="moveBarRight"
               class="relative w-4 h-4 bg-white rounded-full shadow shadow-gray-300 hover:bg-gray-300 items-center justify-center transition-all duration-300"
               aria-label="Move bar right"
-              :class="{
-                'opacity-0': sliderPosition === 0,
-              }"
               @mousedown="startButtonDragging"
               @touchstart="startButtonTouchDrag"
             >
