@@ -35,9 +35,9 @@
           <path :d="leftWingPath" fill="#ffb86aa0" />
 
           <!-- Right Wing -->
-          <path :d="rightWingPath" fill="#ffb86ae0" />
+          <path :d="rightWingPath" fill="#fb2c36a8" />
         </svg>
-        <div class="bg-orange-300 w-full h-2"></div>
+        <div class="bg-indigo-400 w-full h-4"></div>
       </div>
     </div>
   </div>
