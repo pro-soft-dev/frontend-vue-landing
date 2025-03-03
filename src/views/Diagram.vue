@@ -46,11 +46,8 @@
       <div class="relative h-[400px]">
         <!-- Center Bar -->
         <div
-          class="absolute left-1/2 bottom-0 w-10 bg-white rounded-t transform -translate-x-1/2 border border-gray-300 border-b-0"
+          class="absolute left-1/2 bottom-0 w-10 bg-white rounded-t transform -translate-x-1/2 border border-gray-300 border-b-0 flex flex-col items-center justify-between"
           :style="{ height: `${sliderPosition}%` }"
-          :class="{
-            'border-none': sliderPosition === 0,
-          }"
         >
           <!-- Control Buttons -->
           <div
@@ -88,6 +85,28 @@
               >
             </button>
           </div>
+          <div
+            class="flex flex-col items-center justify-center -rotate-90 w-max mt-4"
+            :style="{
+              display: sliderPosition < 15 ? 'none' : 'flex',
+            }"
+          >
+            <div class="text-sm">now</div>
+            <div class="text-sm">for free</div>
+          </div>
+          <div class="flex justify-center items-center">
+            <svg width="100" height="100" viewBox="0 0 100 100" class="w-5 h-5">
+              <circle cx="35" cy="35" r="4" fill="gray" />
+              <circle cx="65" cy="35" r="4" fill="gray" />
+              <path
+                d="M30 60 Q50 80, 70 60"
+                stroke="gray"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
         </div>
 
         <!-- Wings -->
@@ -115,11 +134,23 @@
             }"
           ></div>
           <div
-            class="absolute left-1/2 -translate-x-1/2 w-10 h-full border border-gray-300 border-t-0 border-b-0"
+            class="absolute left-1/2 -translate-x-1/2 w-10 h-full border border-gray-300 border-b-0 text-center flex items-center justify-center"
             :style="{
               background: 'white',
             }"
-          ></div>
+          >
+            <svg width="100" height="100" viewBox="0 0 100 100" class="w-5 h-5">
+              <circle cx="35" cy="35" r="4" fill="gray" />
+              <circle cx="65" cy="35" r="4" fill="gray" />
+              <path
+                d="M30 60 Q50 80, 70 60"
+                stroke="gray"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
