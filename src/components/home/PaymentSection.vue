@@ -6,11 +6,8 @@ const selectedPaymentMethod = ref("paypal");
 const activeTab = ref("buy");
 const fixedPrice = 54.0;
 const offerAmount = ref(21);
-const minOffer = 21;
+const minOffer = 1;
 const maxOffer = 65;
-const totalFee = computed(() =>
-  activeTab.value === "offer" ? offerAmount.value : fixedPrice
-);
 
 const showPaymentModal = ref(false);
 const includeFees = ref(false);
@@ -141,40 +138,43 @@ const rangeBackground = computed(() => {
     <div class="my-4 md:hidden">
       <span class="text-lg">MAKE A BID</span>
     </div>
-    <div class="mb-6 hidden md:block">
-      <div class="text-gray-600 mb-2">Price</div>
-      <div class="text-xl font-bold">EUR {{ fixedPrice.toFixed(2) }}</div>
-      <div class="text-sm text-gray-500">
-        <span class="font-bold text-black">+ Fees</span> Approximately EUR
-        {{ paymentFees.toFixed(2) }}
+
+    <div class="flex">
+      <div class="mb-6 hidden md:block w-1/2">
+        <div class="text-gray-600 mb-2">Price</div>
+        <div class="text-xl font-bold">EUR {{ fixedPrice.toFixed(2) }}</div>
+        <div class="text-sm text-gray-500">
+          <span class="font-bold text-black">+ Fees</span> Approximately EUR
+          {{ paymentFees.toFixed(2) }}
+        </div>
+      </div>
+      <div class="my-6 md:w-1/2 w-full">
+        <input
+          type="range"
+          v-model="offerAmount"
+          :min="minOffer"
+          :max="maxOffer"
+          :style="rangeBackground"
+          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+        <!-- <div class="flex justify-between mt-2">
+          <span class="text-sm text-gray-500">{{ minOffer }}$</span>
+          <span class="text-sm text-gray-500">{{ maxOffer }}$</span>
+        </div> -->
+
+        <div class="flex justify-between items-center mb-6">
+          <div class="text-center">
+            <div class="font-bold">{{ offerAmount }}$</div>
+            <div class="text-sm text-gray-500">Your Bid</div>
+          </div>
+          <div class="text-center">
+            <div class="font-bold">{{ maxOffer }}$</div>
+            <div class="text-sm text-gray-500">Total Fee</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="mb-6">
-      <input
-        type="range"
-        v-model="offerAmount"
-        :min="minOffer"
-        :max="maxOffer"
-        :style="rangeBackground"
-        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-      />
-      <div class="flex justify-between mt-2">
-        <span class="text-sm text-gray-500">{{ minOffer }}$</span>
-        <span class="text-sm text-gray-500">{{ maxOffer }}$</span>
-      </div>
-    </div>
-
-    <div class="flex justify-between items-center mb-6">
-      <div class="text-center">
-        <div class="font-bold">{{ offerAmount }}$</div>
-        <div class="text-sm text-gray-500">Your Bid</div>
-      </div>
-      <div class="text-center">
-        <div class="font-bold">{{ totalFee }}$</div>
-        <div class="text-sm text-gray-500">Total Fee</div>
-      </div>
-    </div>
     <div class="hidden md:flex gap-4">
       <button
         @click="openPaymentModal"
@@ -188,9 +188,9 @@ const rangeBackground = computed(() => {
         class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:bg-gray-300"
       >
         {{ canMakeOffer ? "MAKE AN OFFER" : "Maximum offers reached" }}
-        <span v-if="canMakeOffer" class="text-sm"
+        <!-- <span v-if="canMakeOffer" class="text-sm"
           >({{ maxOffers - offerCount }} attempts left)</span
-        >
+        > -->
       </button>
     </div>
 

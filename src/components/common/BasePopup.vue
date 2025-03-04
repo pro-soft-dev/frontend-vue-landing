@@ -14,12 +14,16 @@ defineEmits<{
   <transition name="modal">
     <div
       v-if="show"
-      class="fixed inset-0 bg-[#00000090] bg-opacity-50 flex items-center justify-center z-50"
+      class="fixed inset-0 flex items-center justify-center z-50"
     >
+      <div
+        class="absolute w-full bg-[#00000090] bg-opacity-50 h-full"
+        @click="$emit('close')"
+      ></div>
       <div
         :class="[
           'bg-white rounded-lg p-6 max-w-2xl mx-4 relative',
-          width || 'w-96',
+          width || 'w-[430px]',
         ]"
       >
         <div class="flex justify-between items-center mb-4">
