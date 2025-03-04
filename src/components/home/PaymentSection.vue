@@ -139,7 +139,7 @@ const rangeBackground = computed(() => {
       <span class="text-lg">MAKE A BID</span>
     </div>
 
-    <div class="flex">
+    <div class="flex gap-8">
       <div class="mb-6 hidden md:block w-1/2">
         <div class="text-gray-600 mb-2">Price</div>
         <div class="text-xl font-bold">EUR {{ fixedPrice.toFixed(2) }}</div>
@@ -178,14 +178,14 @@ const rangeBackground = computed(() => {
     <div class="hidden md:flex gap-4">
       <button
         @click="openPaymentModal"
-        class="w-full py-3 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50"
+        class="w-full py-3 border border-orange-500 text-orange-500 hover:bg-orange-50"
       >
         DEAL!
       </button>
       <button
         :disabled="!canMakeOffer"
         @click="submitOffer"
-        class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:bg-gray-300"
+        class="w-full py-3 bg-orange-500 text-white hover:bg-orange-600 disabled:bg-gray-300"
       >
         {{ canMakeOffer ? "MAKE AN OFFER" : "Maximum offers reached" }}
         <!-- <span v-if="canMakeOffer" class="text-sm"
